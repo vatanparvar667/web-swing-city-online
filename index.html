@@ -52,13 +52,16 @@ html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:
 #chatIn{position:fixed;left:calc(env(safe-area-inset-left,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:min(420px,70vw);display:none;font:15px "Trebuchet MS",system-ui,sans-serif;padding:7px 10px;border-radius:8px;border:2px solid #3a5aa0;background:rgba(15,23,51,.9);color:var(--ink);z-index:4}
 #bC{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 182px);width:40px;height:40px;border-radius:50%;border:2px solid rgba(111,211,255,.6);background:rgba(10,15,36,.55);font:15px system-ui;touch-action:none}
 #boss{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 56px);transform:translateX(-50%);width:min(420px,70vw);padding:6px 12px;border-radius:10px;background:var(--panel);border:1px solid rgba(255,225,77,.55);text-align:center;font-size:14px;pointer-events:none;display:none;box-sizing:border-box}
-#boss b{color:#ffe14d}#boss .bar{display:block;width:100%;height:10px;margin-top:5px}#boss .bar i{background:linear-gradient(90deg,#ffb347,#ffe14d)}
+#boss b{color:#ffe14d}#boss .bb{display:flex;align-items:center;gap:5px;white-space:nowrap}#boss .bb span:not(.bar){min-width:0;overflow:hidden;text-overflow:ellipsis}#boss .bb+.bb{margin-top:4px}#boss .bar{display:block;flex:1;min-width:60px;height:8px;margin:0 0 0 4px}#boss .bar i{background:linear-gradient(90deg,#ffb347,#ffe14d)}
 #dr{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);padding:6px 14px;border-radius:10px;background:var(--panel);border:1px solid rgba(125,249,255,.5);color:#bff6ff;font-size:14px;white-space:nowrap;pointer-events:none;display:none}
 #bD{right:calc(env(safe-area-inset-right,0px) + 192px);bottom:calc(env(safe-area-inset-bottom,0px) + 118px)}
 #rot{display:none;color:var(--gold);font-weight:700}
 @media (pointer:coarse) and (orientation:portrait){#rot{display:block}}
 @media (pointer:coarse) and (orientation:landscape){#net{top:calc(env(safe-area-inset-top,0px) + 60px);right:calc(env(safe-area-inset-right,0px) + 134px)}#race{top:calc(env(safe-area-inset-top,0px) + 12px)}#boss{top:calc(env(safe-area-inset-top,0px) + 50px)}#dr{top:calc(env(safe-area-inset-top,0px) + 94px)}#chat{left:calc(env(safe-area-inset-left,0px) + 170px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);max-width:calc(100vw - 470px)}}
 @media (pointer:coarse) and (max-height:430px){.tb{width:64px;height:64px;font-size:11px;right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}#bW{bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#bZ{right:calc(env(safe-area-inset-right,0px) + 88px)}#bS{right:calc(env(safe-area-inset-right,0px) + 88px);bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#bA{bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bV{right:calc(env(safe-area-inset-right,0px) + 88px);bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bG{right:calc(env(safe-area-inset-right,0px) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bD{right:calc(env(safe-area-inset-right,0px) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#joy{width:110px;height:110px}#knob{left:30px;top:30px}#hud{font-size:11px;line-height:1.35}}
+@media (pointer:coarse){#boss{font-size:12px;padding:4px 10px;width:min(400px,52vw)}#boss .bar{height:6px;min-width:40px}#dr{bottom:auto;white-space:normal;max-width:52vw;text-align:center}}
+#vm{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);display:none;flex-wrap:wrap;justify-content:center;gap:8px;max-width:min(92vw,520px);z-index:3}
+#vm button{font:600 15px "Trebuchet MS",system-ui,sans-serif;padding:12px 16px;border-radius:12px;border:2px solid rgba(111,211,255,.6);background:rgba(10,15,36,.88);color:var(--ink);touch-action:none}
 .sb{font:600 15px "Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#1b2a52;border:1px solid #3a5aa0;border-radius:8px;padding:6px 14px;cursor:pointer}
 </style>
 </head>
@@ -69,23 +72,23 @@ html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:
 <canvas id="map"></canvas>
 <div id="race"></div>
 <div id="dr"></div>
-<div id="boss"><b>Гигантский Губка Боб</b> · <span id="bossSt">идёт</span><span class="bar"><i id="bossHp"></i></span></div>
+<div id="boss"></div>
 <div id="net"></div>
 <div id="chat"></div>
 <input id="chatIn" maxlength="140" placeholder="Сообщение — Enter, отмена — Esc" autocomplete="off">
 <div id="combo"></div>
 <div id="cross"></div>
-<div id="tc"><div id="joy"><i id="knob"></i></div><button class="tb" id="bW">Паутина</button><button class="tb" id="bJ">Прыжок</button><button class="tb" id="bZ">Рывок</button><button class="tb" id="bS">Нырок</button><button class="tb" id="bA">Удар</button><button class="tb" id="bV">Сеть</button><button class="tb" id="bG">Взять / бросить</button><button class="tb" id="bD">Дрон</button><button id="bP">❚❚</button><button id="bC">💬</button></div>
+<div id="tc"><div id="joy"><i id="knob"></i></div><button class="tb" id="bW">Паутина</button><button class="tb" id="bJ">Прыжок</button><button class="tb" id="bZ">Рывок</button><button class="tb" id="bS">Нырок</button><button class="tb" id="bA">Удар</button><button class="tb" id="bV">Сеть</button><button class="tb" id="bG">Взять / бросить</button><button class="tb" id="bD">Техника</button><div id="vm"></div><button id="bP">❚❚</button><button id="bC">💬</button></div>
 <div id="ov"><div>
 <h1 id="ovh">Web Swing 3D</h1>
 <p id="rot">📱 Поверните телефон горизонтально — так удобнее играть</p>
-<p id="ovs">Кликните или коснитесь, чтобы начать. Мышь или стрелки — обзор; в полёте камера сама разворачивается по ходу. На телефоне: джойстик слева, свайп — обзор, «Паутина» — держать для раскачки, «Удар» и «Сеть» — бой, «Прыжок» в воздухе — сальто, «Дрон» — дрон. Клавиши работают в любой раскладке.</p>
+<p id="ovs">Кликните или коснитесь, чтобы начать. Мышь или стрелки — обзор; в полёте камера сама разворачивается по ходу. На телефоне: джойстик слева, свайп — обзор, «Паутина» — держать для раскачки, «Удар» и «Сеть» — бой, «Прыжок» в воздухе — сальто, «Техника» — дрон, робот, вертолёт, ракета, танк. Клавиши работают в любой раскладке.</p>
 <div id="mpBox"><label>Имя игрока: <input id="nick" maxlength="16" placeholder="обязательно" autocomplete="off" spellcheck="false"></label>
 <div id="nickHint">Введите имя — его увидят другие игроки над вашей головой.</div>
 <div>Сеть: <span id="netS">подключение…</span></div>
 <div>Комната: <b id="roomN">city</b> <button id="copyL" class="sb">Скопировать ссылку</button> <button id="newRoom" class="sb">Своя комната</button></div></div>
 <p><button id="suitB" class="sb">Костюм: Классический ▸</button></p>
-<p class="go">Цели: останавливайте преступления (мигающие красные метки на карте), соберите 30 золотых жетонов на крышах, пройдите три гонки по кольцам (старт — цветные световые столбы), победите босса — гигантского Губку Боба (жёлтый столб). Полёт без касания земли копит очки стиля.</p>
+<p class="go">Цели: останавливайте преступления (мигающие красные метки на карте), соберите 30 золотых жетонов на крышах, пройдите три гонки по кольцам (старт — цветные световые столбы), победите боссов — Губку Боба с Патриком в заливе (жёлтый и розовый столбы) и Кинг-Конга на самой высокой башне (оранжевый столб). Полёт без касания земли копит очки стиля.</p>
 <p id="help"><kbd>Shift</kbd> / <kbd>F</kbd> (держать) — раскачка: нить сама цепляется за дома впереди и сама отпускается в конце дуги. На земле — паркур-бег, в стену — забег вверх.<br>
 Взлёт: держите <kbd>Shift</kbd> + <kbd>W</kbd> и нажмите <kbd>Пробел</kbd> или сбегите с крыши.<br>
 <kbd>W A S D</kbd> — бег и руление · на стене <kbd>S</kbd> — вниз · <kbd>C</kbd> — пикирование (в толпу бандитов — удар по площади)<br>
@@ -94,7 +97,8 @@ html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:
 <kbd>V</kbd> / <kbd>колесо мыши</kbd> / <kbd>ПКМ</kbd> по бандиту (прицел краснеет) — связать паутиной: 1 — руки, 2 — ноги, 3 — кокон; у стены — приклеит. Недовязанный вырвется через 8 с<br>
 <kbd>E</kbd> / <kbd>ПКМ</kbd> — рывок к точке под прицелом · <kbd>G</kbd> — взять / бросить (машиной по бандитам тоже можно)<br>
 <kbd>X</kbd> — дрон: камера за ним, <kbd>W A S D</kbd> — полёт, <kbd>Пробел</kbd>/<kbd>C</kbd> — вверх/вниз, <kbd>Shift</kbd> — форсаж, <kbd>ЛКМ</kbd> (держать) — огонь, <kbd>ПКМ</kbd>/<kbd>E</kbd> — таран; врезался на скорости — взрыв; <kbd>X</kbd> — вернуть<br>
-<kbd>Y</kbd> — позвать босса: Гигантский Губка Боб бродит по заливу, топает (волна бьёт тех, кто низко), пускает пузыри (лопаются от паутины и ударов), бьёт рукой вблизи. Бейте, стреляйте паутиной (4 попадания — опутан), бросайте машины, прыгайте ему на голову. В мультиплеере босс общий<br>
+<kbd>1</kbd>–<kbd>5</kbd> — техника: 1 дрон, 2 боевой робот, 3 вертолёт, 4 ракета верхом, 5 танк; та же цифра или <kbd>X</kbd> — выйти. В технике <kbd>ЛКМ</kbd> — огонь, <kbd>ПКМ</kbd> — второе оружие (ракеты или пулемёт), <kbd>E</kbd> — удар робота или соскочить с ракеты. Атаки по герою бьют по броне техники; чужие снаряды тоже<br>
+<kbd>Y</kbd> — позвать боссов: сначала Губка Боб с Патриком (залив: топот, пузыри, таран и прыжок пузом, комбо вдвоём), потом Кинг-Конг (вершина самой высокой башни: бьёт в грудь — волна, бросает глыбы, отмахивается; раскачивайтесь вокруг башни). Бейте, стреляйте паутиной (4 попадания — опутан), бросайте машины, прыгайте на голову. В мультиплеере боссы общие<br>
 <kbd>T</kbd> — костюм (пятый — Железный человек: <kbd>Пробел</kbd> вверх, <kbd>C</kbd> вниз, <kbd>Shift</kbd> форсаж, <kbd>V</kbd> / <kbd>ПКМ</kbd> — репульсор) · <kbd>N</kbd> — +3 часа · <kbd>B</kbd> — дождь · <kbd>K</kbd> — музыка · <kbd>M</kbd> — звук · <kbd>Q</kbd> — отпустить нить · <kbd>R</kbd> — старт · <kbd>Esc</kbd> / <kbd>P</kbd> — пауза</p>
 </div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -275,9 +279,9 @@ function trafficStep(dt,now){
     if(!green(L.ax,now)){const cs=L.ax?SZ:SX,half=L.ax?3.5:5,th=front-.3+half+1,m=L.dir>0?Math.ceil(th/cs-.5):Math.floor(-th/cs-.5),sc=(m+.5)*cs,ds=sc*L.dir-half-1-front;
      if(sc>=L.lo-6&&sc<=L.hi+6&&ds<25)tv=Math.min(tv,Math.max(0,ds)*.7)}
     // герой на полосе впереди: стоим и сигналим
-    if(p.y<3){const pp=L.ax?p.z:p.x,po=L.ax?p.x:p.z;if(Math.abs(po-L.off)<2.2){const ah=(pp-c.s)*L.dir;
-     if(ah>0&&ah<14){tv=Math.min(tv,Math.max(0,ah-4)*.8);if(ah<10&&now>c.honk){c.honk=now+3;sfx.honk(near(t2.set(L.ax?L.off:c.s,1,L.ax?c.s:L.off)))}}
-     else if(ah>-2.4&&ah<=0&&c.v>5&&now>c.hit){c.hit=now+1;v.x+=(L.ax?0:L.dir)*12;v.z+=(L.ax?L.dir:0)*12;v.y=7;onG=false;sfx.punch();showToast('Осторожно, машина!')}}}
+    if(p.y<3){const pp=L.ax?p.z:p.x,po=L.ax?p.x:p.z,wr=hitR();if(Math.abs(po-L.off)<2.2+wr){const ah=(pp-c.s)*L.dir;
+     if(ah>0&&ah<14+wr){tv=Math.min(tv,Math.max(0,ah-4-wr)*.8);if(ah<10&&now>c.honk){c.honk=now+3;sfx.honk(near(t2.set(L.ax?L.off:c.s,1,L.ax?c.s:L.off)))}}
+     else if(!ride.k&&ah>-2.4&&ah<=0&&c.v>5&&now>c.hit){c.hit=now+1;v.x+=(L.ax?0:L.dir)*12;v.z+=(L.ax?L.dir:0)*12;v.y=7;onG=false;sfx.punch();showToast('Осторожно, машина!')}}}
     c.v=tv<c.v?Math.max(tv,c.v-14*dt):Math.min(tv,c.v+4*dt);c.s+=L.dir*c.v*dt;
     // конец полосы: разворот на встречную, если её нет — машина появляется на случайной полосе
     if(c.s*L.dir>(L.dir>0?L.hi:-L.lo)){const O=LANES.find(o=>o.ax===L.ax&&o.c===L.c&&o.dir===-L.dir&&c.s>=o.lo-1&&c.s<=o.hi+1);
@@ -332,14 +336,14 @@ function musTick(){if(!AC||!musicOn||AC.state!=='running')return;if(musNext<AC.c
 
 // Разрушаемые и переносимые уличные объекты.
 const propMat={car:[0xc9444d,0x397aa6,0xe2ad36,0x444b58].map(color=>new THREE.MeshLambertMaterial({color})),glass:new THREE.MeshLambertMaterial({color:0x263c52}),hydrant:new THREE.MeshLambertMaterial({color:0xd9463d}),npc:[0x78a77c,0x8775a5,0xc29a61].map(color=>new THREE.MeshLambertMaterial({color})),skin:new THREE.MeshLambertMaterial({color:0xd3a27e})};
-const toast=document.createElement('div');toast.style.cssText='position:fixed;left:50%;top:68%;transform:translate(-50%,-50%);color:#e8f1ff;background:#10162dcc;padding:9px 14px;border-radius:8px;font:14px system-ui;pointer-events:none;opacity:0;transition:opacity .2s;z-index:4;white-space:nowrap';document.body.appendChild(toast);function showToast(text,ms){toast.textContent=text;toast.style.opacity='1';clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.style.opacity='0',ms||1600)}
+const toast=document.createElement('div');toast.style.cssText='position:fixed;left:50%;top:68%;transform:translate(-50%,-50%);color:#e8f1ff;background:#10162dcc;padding:9px 14px;border-radius:8px;font:14px system-ui;pointer-events:none;opacity:0;transition:opacity .2s;z-index:4;max-width:min(88vw,720px);text-align:center';document.body.appendChild(toast);function showToast(text,ms){toast.textContent=text;toast.style.opacity='1';clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.style.opacity='0',ms||1600)}
 function makeProp(kind,x,z,n=0){const g=new THREE.Group();g.userData={kind,thrown:false,velocity:new THREE.Vector3(),fountain:0,down:0};
  if(kind==='car')for(const[geo,m]of[[CAR.body,propMat.car[n%4]],[CAR.glass,carMats.glass],[CAR.wheels,carMats.tire],[CAR.head,carMats.head],[CAR.tail,carMats.tail]])g.add(new THREE.Mesh(geo,m));
  else{M(new THREE.CylinderGeometry(.42,.5,1.25,8),propMat.hydrant,g,0,.62,0);M(new THREE.CylinderGeometry(.25,.25,.28,8),propMat.hydrant,g,0,1.3,0);M(new THREE.CylinderGeometry(.14,.14,.38,8),propMat.hydrant,g,.48,.72,0)}
  g.position.set(x,kind==='car'?-.14:.12,z);scene.add(g);propEntities.add(g);return g}
 let heldProp=null;
 // бросок летит туда, куда смотрит прицел
-function grabOrThrow(){if(drone.on)return;if(heldProp){const o=heldProp;camera.getWorldDirection(dir);let t=Math.min(firstHit(camera.position,dir,220),220);if(dir.y<-.01)t=Math.min(t,(camera.position.y-.5)/-dir.y);
+function grabOrThrow(){if(drone.on||ride.k)return;if(heldProp){const o=heldProp;camera.getWorldDirection(dir);let t=Math.min(firstHit(camera.position,dir,220),220);if(dir.y<-.01)t=Math.min(t,(camera.position.y-.5)/-dir.y);
   const d=camera.position.clone().addScaledVector(dir,t).sub(p);if(d.length()<4)d.set(-Math.sin(yaw),0,-Math.cos(yaw));d.normalize();d.y+=.12;d.normalize();
   o.userData.thrown=true;o.userData.velocity.copy(v).addScaledVector(d,kindSpeed(o));o.position.copy(p).addScaledVector(d,2);heldProp=null;sfx.toss();return}
  let best=null,bd=5;for(const o of propEntities){if(o.userData.thrown||!o.parent)continue;const d=o.position.distanceTo(p);if(d<bd){bd=d;best=o}}
@@ -392,7 +396,7 @@ function stepProps(dt){const t=performance.now()/1000;for(const o of propEntitie
  if(heldProp===o){o.position.copy(p).add(new V3(-Math.sin(yaw)*1.5,1.2,-Math.cos(yaw)*1.5));o.rotation.set(0,yaw,0)}
  else if(u.thrown){pv.copy(o.position);u.velocity.y-=16*dt;o.position.addScaledVector(u.velocity,dt);const s=u.velocity.length();
   if(s>8)for(const f of foes)if(!f.ko&&Math.hypot(o.position.x-f.g.position.x,o.position.y-f.g.position.y-1,o.position.z-f.g.position.z)<1.8){hitFoe(f,3,14,'Попадание!');u.velocity.multiplyScalar(.3)}
-  if(s>8&&bossInside(o.position,1)){bossHurt(u.kind==='car'?25:12,'Попадание по боссу!');if(u.kind==='car'){burst(o.position);kill(o);continue}u.velocity.multiplyScalar(-.3)}
+  const Bh=s>8&&bossInside(o.position,1);if(Bh){bossHurt(Bh,u.kind==='car'?25:12,'Попадание по боссу!');if(u.kind==='car'){burst(o.position);kill(o);continue}u.velocity.multiplyScalar(-.3)}
   if(u.kind==='npc')o.rotation.x-=7*dt;
   const gy=topAt(o.position.x,o.position.z,pv.y);
   if(gy<-1e8){if(o.position.y<-.9){splash(new V3(o.position.x,-.85,o.position.z),u.kind==='car'?2:1);kill(o);continue}}
@@ -526,7 +530,7 @@ let p=new V3(0,PR,0),v=new V3(),anchor=null,len=0,onG=true,yaw=0,pit=.35,maxSp=+
 const dir=new V3();let crawl=false,wn=null,wt=0,zip=false,noGrab=0;
 let score=+sv.sc||0,chain=0,mult=1,bestChain=+sv.ch||0,flip=0,flipAx=null,flipS=-1,webT=0,camD=14,hd=0,started=false,pauseAt=0;
 const safe=new V3(0,PR,0);
-function reset(){p.set(0,PR,0);v.set(0,0,0);anchor=null;crawl=zip=false;yaw=0;pit=.35;chain=0;mult=1;flip=0;strike=null;tr=-1;race=-1;raceVis();collide();if(drone.on)droneEnd()}
+function reset(){if(ride.k)vehExit();p.set(0,PR,0);v.set(0,0,0);anchor=null;crawl=zip=false;yaw=0;pit=.35;chain=0;mult=1;flip=0;strike=null;tr=-1;race=-1;raceVis();collide();if(drone.on)droneEnd()}
 function rayBox(o,d,B){let t0=0,t1=1e9;
  for(const[oo,dd,lo,hi]of[[o.x,d.x,B.x0,B.x1],[o.y,d.y,B.y0,B.h],[o.z,d.z,B.z0,B.z1]]){
   if(Math.abs(dd)<1e-8){if(oo<lo||oo>hi)return Infinity}
@@ -564,7 +568,7 @@ function attach(manual){if(crawl||zip)return;const r=findAnchor();if(r)hook(r[0]
 // отпускание на подъёме слегка подталкивает вперёд-вверх; автоотпуск на скорости иногда добавляет трюк
 function letGo(trk){if(!anchor||zip)return;anchor=null;const hs=Math.hypot(v.x,v.z);if(v.y>-2&&hs>8){v.x+=v.x/hs*3;v.z+=v.z/hs*3;v.y+=3}
  if(trk&&hs>14&&Math.random()<.6){relT=.55;relK=Math.floor(Math.random()*4);chain+=20*mult}}
-function swingDown(){if(playing()&&!onG&&!SU.iron&&!drone.on)attach(true)}
+function swingDown(){if(playing()&&!onG&&!SU.iron&&!drone.on&&!ride.k)attach(true)}
 // полёт железного человека: Пробел — вверх, C — вниз, W A S D — по камере, Shift — форсаж; без ввода висит на месте, опустился на землю — идёт пешком
 function ironStep(dt,ax,az){crawl=false;anchor=null;zip=false;const up=(k.space?1:0)-(k.c?1:0),boost=k.shift||k.tw;
  if(onG&&up<=0){const sp=boost?22:13,f=Math.min(1,10*dt);v.x+=(ax*sp-v.x)*f;v.z+=(az*sp-v.z)*f;v.y-=30*dt;return}
@@ -573,11 +577,11 @@ function ironStep(dt,ax,az){crawl=false;anchor=null;zip=false;const up=(k.space?
 function swingUp(){if(!held())letGo()}
 function ropeJump(){v.y+=12;v.x-=Math.sin(yaw)*8;v.z-=Math.cos(yaw)*8;anchor=null;swingWait=performance.now()/1000+.35;sfx.toss()}
 // пока горит паучье чутьё, пробел — уклонение: 0.7 с неуязвимости и отскок вбок
-function jumpKey(){if(!playing()||drone.on)return;const now=performance.now()/1000;
+function jumpKey(){if(!playing()||drone.on||ride.k)return;const now=performance.now()/1000;
  if(now<senseT+.1&&now>invT&&!SU.iron){invT=now+.7;senseT=0;const sd=Math.random()<.5?1:-1;v.x+=Math.cos(yaw)*sd*11;v.z-=Math.sin(yaw)*sd*11;if(onG)v.y=8;score+=50;sfx.flip();showToast('Уклонение! +50');return}
  if(SU.iron)return;if(anchor&&!zip&&!crawl)ropeJump();else trick()}
 // рывок к точке под прицелом; прицел в пустоту — веб-рывок вперёд в воздухе
-function zipShot(){if(!playing()||drone.on)return;if(SU.iron||foeInAim(.97,60)||bossInAim(.95,160)){webShot();return}crawl=false;camera.getWorldDirection(dir);let a=null;const b=firstHit(camera.position,dir,380),now=performance.now()/1000;
+function zipShot(){if(!playing()||drone.on||ride.k)return;if(SU.iron||foeInAim(.97,60)||bossInAim(.95,160)){webShot();return}crawl=false;camera.getWorldDirection(dir);let a=null;const b=firstHit(camera.position,dir,380),now=performance.now()/1000;
  if(b<380){const P=camera.position.clone().addScaledVector(dir,b),dd=P.clone().sub(p),L0=dd.length();dd.divideScalar(L0||1);if(L0>5&&firstHit(p,dd,L0+1)>L0-.9)a=P}
  if(a){hook(a);zip=true;sfx.zip();flash(true)}
  else if(!onG&&now>dashCd){const s=Math.max(Math.hypot(v.x,v.z),28)+6;v.set(-Math.sin(yaw)*s,Math.max(v.y,4),-Math.cos(yaw)*s);anchor=null;dashCd=now+.7;sfx.zip();flash(true);showToast('Веб-рывок')}
@@ -586,6 +590,11 @@ function zipShot(){if(!playing()||drone.on)return;if(SU.iron||foeInAim(.97,60)||
 function trick(){if(onG||anchor||crawl||zip||flip>0)return;
  const side=k.a||k.d;flip=1e-3;flipAx=side?AZ:AX;flipS=k.a?1:-1;const pts=150*mult;chain+=pts;sfx.flip();showToast((side?'Винт! +':'Сальто! +')+pts)}
 
+// чужой вертолёт: на его полозья можно встать — платформа везёт героя
+let plat=null;
+function heliPlat(){plat=null;for(const o of peersMP.values()){const V0=o.vk===3&&o.vm&&o.vm[3];if(!V0||!V0.g.visible)continue;
+ const Q=V0.g.position,c=Math.cos(o.vyaw),sn=Math.sin(o.vyaw),dx=p.x-Q.x,dz=p.z-Q.z,lx=dx*c-dz*sn,lz=dx*sn+dz*c,top=Q.y-2.5,f=p.y-PR-top;
+ if(Math.abs(lx)<2.2&&Math.abs(lz)<3.3&&f>-1.2&&f<.7&&v.y<=o.pv.y+3){p.y=top+PR;if(v.y<o.pv.y)v.y=o.pv.y;onG=true;plat=o;if(!o.platHint){o.platHint=1;showToast('Ты на полозьях вертолёта '+o.name+' — держись!',3000)}}}}
 function collide(){
  onG=false;const ci=Math.round(p.x/SX),cj=Math.round(p.z/SZ);
  for(let a=ci-1;a<=ci+1;a++)for(let b=cj-1;b<=cj+1;b++){
@@ -602,7 +611,7 @@ function collide(){
    }}}
  if(p.y<=PR&&solidAt(p.x,p.z)){p.y=PR;if(v.y<0)v.y=0;onG=true}
  const LX=520,LZ=440;if(Math.abs(p.x)>LX){p.x=Math.sign(p.x)*LX;v.x*=-.3}if(Math.abs(p.z)>LZ){p.z=Math.sign(p.z)*LZ;v.z*=-.3}
- bossCollide();
+ heliPlat();bossCollide();
 }
 
 // --- цели: жетоны на крышах и гонка по кольцам ---
@@ -643,7 +652,7 @@ function collect(now){
   raceVis()}}
 // очки стиля: копятся в полёте, множитель растёт с каждой нитью, касание земли переводит связку в очки
 function bank(){const n=Math.round(chain);score+=n;if(n>bestChain){bestChain=n;if(n>=500)showToast(`Рекордная связка: +${n}`)}else if(n>=300)showToast(`Связка: +${n}`);chain=0;mult=1;save()}
-function landFX(s){sfx.land(cl(s/50,.3,1));shake=Math.max(shake,Math.min(.9,.2+(s-20)*.02));puff(ringG,0xcfd8ff,new V3(p.x,p.y-PR+.08,p.z),1.4,2.6,.5,.55);scare(p);if(onBoss&&s>15)bossHurt(15,'Удар с пикирования по боссу!');
+function landFX(s){sfx.land(cl(s/50,.3,1));shake=Math.max(shake,Math.min(.9,.2+(s-20)*.02));puff(ringG,0xcfd8ff,new V3(p.x,p.y-PR+.08,p.z),1.4,2.6,.5,.55);scare(p);if(onBoss&&s>15)bossHurt(onBoss,15,'Удар с пикирования по боссу!');
  if(s>42){landT=performance.now()/1000+.7;showToast('Супергеройское приземление!')}
  // удар с пикирования: всех бандитов в 7 м сбивает с ног
  if(s>26){let n=0;for(const f of foes){if(f.ko)continue;const q=f.g.position;if(Math.hypot(q.x-p.x,q.z-p.z)<7&&Math.abs(q.y-(p.y-PR))<2.5){hitFoe(f,2,16);n++}}if(n){showToast('Удар с пикирования!');shake=Math.max(shake,.8)}}}
@@ -670,10 +679,10 @@ function spawnCrime(){for(let n=0;n<30;n++){const c=landCells[Math.floor(Math.ra
   if(!cr.foes.length)continue;
   cr.beam=new THREE.Mesh(beamGeo,new THREE.MeshBasicMaterial({color:0xff3b3b,transparent:true,opacity:.28,fog:false,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));cr.beam.position.set(x,3,z);scene.add(cr.beam);
   crimes.push(cr);showToast(`${cr.name} — ${cr.where}! Красная метка на карте`);sfx.alarm();return}}
-function hitPlayer(dmg,from){const now=performance.now()/1000;if(now<invT)return;hp-=dmg;hurtT=now;sfx.hurt();shake=Math.max(shake,.35);
+function hitPlayer(dmg,from){if(ride.k){vehHurt(dmg*1.2);return}const now=performance.now()/1000;if(now<invT)return;hp-=dmg;hurtT=now;sfx.hurt();shake=Math.max(shake,.35);
  if(from){t2.set(p.x-from.x,0,p.z-from.z);if(t2.lengthSq()>.01)v.addScaledVector(t2.normalize(),7)}
  if(hp<=0){p.copy(safe);v.set(0,0,0);anchor=null;crawl=zip=false;strike=null;chain=0;mult=1;hp=100;invT=now+2;collide();showToast('Паук без сознания… очнулся в безопасном месте')}}
-function hitFoe(f,dmg,kb,label,from){if(f.boss){bossHurt(dmg*5,label||null);return}const q=f.g.position,o0=from||p;t2.set(q.x-o0.x,0,q.z-o0.z);if(t2.lengthSq()<.01)t2.set(-Math.sin(hd),0,-Math.cos(hd));t2.normalize();
+function hitFoe(f,dmg,kb,label,from){if(f.boss){bossHurt(f.boss,dmg*5,label||null);return}const q=f.g.position,o0=from||p;t2.set(q.x-o0.x,0,q.z-o0.z);if(t2.lengthSq()<.01)t2.set(-Math.sin(hd),0,-Math.cos(hd));t2.normalize();
  f.hp-=dmg;f.vel.set(t2.x*kb,kb*.4,t2.z*kb);f.stun=Math.max(f.stun,.6);f.wind=0;f.stuck=false;
  sfx.punch();puff(sphG,0xffffff,new V3(q.x,q.y+1.2,q.z),.1,4,.18,.8);shake=Math.max(shake,.22);score+=25;if(label)showToast(label);
  if(f.hp<=0&&!f.ko)ko(f)}
@@ -686,13 +695,14 @@ function webHit(f,d){f.web++;f.webT=performance.now()/1000;f.wind=0;f.vel.addSca
  else if(f.web>=3||f.hp<=1){f.co.visible=true;f.bA.visible=f.bL.visible=false;if(!f.ko){ko(f);showToast('Связан паутиной!')}}
  else{f.bA.visible=true;f.bL.visible=f.web>=2;showToast(f.web>=2?'Ноги связаны — ещё выстрел!':'Руки связаны!')}}
 // удар: рядом — серия из трёх, до 18 м впереди — веб-удар с рывком к цели
-function attack(){if(!playing()||drone.on)return;const now=performance.now()/1000;if(now<atkCd)return;atkCd=now+.28;atkN=now-atkT<.75?atkN%3+1:1;atkT=now;
+function attack(){if(!playing()||drone.on||ride.k)return;const now=performance.now()/1000;if(now<atkCd)return;atkCd=now+.28;atkN=now-atkT<.75?atkN%3+1:1;atkT=now;
  camera.getWorldDirection(dir);let best=null,bs=1e9;
  for(const f of foes){if(f.ko)continue;const q=f.g.position,dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,q.y+1-p.y,dz);if(d>18)continue;const fw=(dx*dir.x+dz*dir.z)/(Math.hypot(dx,dz)||1);if(d>3&&fw<.4)continue;const s=d-fw*4;if(s<bs){bs=s;best=f}}
  if(!best){for(const q of bubbles)if(q.m.position.distanceTo(p)<4.5){popBubble(q,true);score+=30;return}
-  if(boss.alive&&!boss.dying){t2.copy(bossAimV);t2.y+=1;const bd=t2.distanceTo(p),fw=((t2.x-p.x)*dir.x+(t2.z-p.z)*dir.z)/(Math.hypot(t2.x-p.x,t2.z-p.z)||1);
-   if(bd<2.8){hitFoe(bossT,atkN===3?2:1,0,atkN===3?'Серия по боссу!':'');return}
-   if(bd<55&&fw>.3){strike=bossT;crawl=zip=false;anchor=null;webT=now;sfx.zip();return}}
+  let bB=null,bm=1e9;for(const B of BOSSES)if(B.alive&&!B.dying){const d=B.aim.distanceTo(p);if(d<bm){bm=d;bB=B}}
+  if(bB){t2.copy(bB.aim);t2.y+=1;const bd=t2.distanceTo(p),fw=((t2.x-p.x)*dir.x+(t2.z-p.z)*dir.z)/(Math.hypot(t2.x-p.x,t2.z-p.z)||1);
+   if(bd<2.8){hitFoe(bB.T,atkN===3?2:1,0,atkN===3?'Серия по боссу!':'');return}
+   if(bd<55&&fw>.3){strike=bB.T;crawl=zip=false;anchor=null;webT=now;sfx.zip();return}}
   sfx.swish();return}
  const q=best.g.position;hd=Math.atan2(-(q.x-p.x),-(q.z-p.z));
  if(Math.hypot(q.x-p.x,q.y+1-p.y,q.z-p.z)>2.8){strike=best;crawl=zip=false;anchor=null;webT=now;sfx.zip()}
@@ -702,10 +712,10 @@ function foeInAim(cone,maxD){camera.getWorldDirection(dir);let tg=null,bc=cone;
  for(const f of foes){if(f.ko)continue;const q=f.g.position;t2.set(q.x-camera.position.x,q.y+1.1-camera.position.y,q.z-camera.position.z);const l=t2.length();if(l>maxD)continue;const c=t2.dot(dir)/l;if(c>bc){bc=c;tg=f}}return tg}
 // выстрел паутиной: цель — бандит в прицеле, иначе ближайший в 20 м; шар доворачивает за целью
 const ZF=new V3(0,0,1);
-function webShot(){if(!playing()||drone.on)return;const now=performance.now()/1000;if(now<webCd)return;webCd=now+.25;webT2=now;
+function webShot(){if(!playing()||drone.on||ride.k)return;const now=performance.now()/1000;if(now<webCd)return;webCd=now+.25;webT2=now;
  let tg=foeInAim(.85,60);if(!tg){let bd=20;for(const f of foes){if(f.ko)continue;const d=f.g.position.distanceTo(p);if(d<bd){bd=d;tg=f}}}
  const bz=!tg&&bossInAim(.8,160);camera.getWorldDirection(dir);A[1].el.localToWorld(hand.set(0,-.3,0));
- const d=tg?new V3(tg.g.position.x,tg.g.position.y+1.1,tg.g.position.z).sub(hand).normalize():bz?new V3(boss.x,17,boss.z).sub(hand).normalize():dir.clone();
+ const d=tg?new V3(tg.g.position.x,tg.g.position.y+1.1,tg.g.position.z).sub(hand).normalize():bz?bz.c.clone().sub(hand).normalize():dir.clone();
  if(tg)hd=Math.atan2(-(tg.g.position.x-p.x),-(tg.g.position.z-p.z));
  const m=new THREE.Mesh(ballGeo,SU.iron?repM:white);m.position.copy(hand);m.scale.set(1,1,3);m.quaternion.setFromUnitVectors(ZF,d);scene.add(m);webs.push({m,d,tg,bz,life:bz?2.6:1.3,rep:!!SU.iron});SU.iron?sfx.rep():sfx.webShot()}
 function fire(f){f.g.updateMatrixWorld(true);const o=f.ra.localToWorld(new V3(0,-.62,-.2)),d=new V3(p.x,p.y+.3,p.z).sub(o).normalize(),m=new THREE.Mesh(bulletGeo,bulletMat);
@@ -749,11 +759,12 @@ function stepFoes(dt,now){
   if(b.life<=0||inBox(b.m.position)){scene.remove(b.m);bullets.splice(i,1)}}
  for(let i=webs.length-1;i>=0;i--){const w=webs[i];
   if(w.tg&&!w.tg.ko){const q=w.tg.g.position;t2.set(q.x,q.y+1.1,q.z).sub(w.m.position).normalize();w.d.lerp(t2,Math.min(1,12*dt)).normalize();w.m.quaternion.setFromUnitVectors(ZF,w.d)}
-  if(w.bz&&boss.alive){t2.set(boss.x,17,boss.z).sub(w.m.position).normalize();w.d.lerp(t2,Math.min(1,12*dt)).normalize();w.m.quaternion.setFromUnitVectors(ZF,w.d)}
+  if(w.bz&&w.bz.alive){t2.copy(w.bz.c).sub(w.m.position).normalize();w.d.lerp(t2,Math.min(1,12*dt)).normalize();w.m.quaternion.setFromUnitVectors(ZF,w.d)}
   w.m.position.addScaledVector(w.d,70*dt);w.life-=dt;let done=w.life<=0;
   if(!done)for(const f of foes){if(f.ko)continue;const q=f.g.position;if(Math.hypot(w.m.position.x-q.x,w.m.position.y-q.y-1,w.m.position.z-q.z)<1.3){if(w.rep){hitFoe(f,2,14,'Репульсор!');puff(sphG,0x9ff3ff,w.m.position,.1,5,.25,.9)}else webHit(f,w.d);done=true;break}}
-  if(!done&&bossInside(w.m.position,.6)){bossHurt(w.rep?8:4,null,!w.rep);puff(sphG,w.rep?0x9ff3ff:0xffffff,w.m.position,.2,4,.25,.9);done=true}
+  const Bw=!done&&bossInside(w.m.position,.6);if(Bw){bossHurt(Bw,w.rep?8:4,null,!w.rep);puff(sphG,w.rep?0x9ff3ff:0xffffff,w.m.position,.2,4,.25,.9);done=true}
   if(!done)for(const q of bubbles)if(q.m.position.distanceTo(w.m.position)<2){popBubble(q,true);score+=30;done=true;break}
+  if(!done)for(const q of rocks)if(q.m.position.distanceTo(w.m.position)<2.6){rockBoom(q,true);score+=40;done=true;break}
   if(!done&&w.rep&&inBox(w.m.position)){puff(sphG,0x9ff3ff,w.m.position,.1,5,.25,.9);done=true}
   if(!done&&inBox(w.m.position)){const s=new THREE.Mesh(globGeo,white);s.position.copy(w.m.position);s.scale.set(1,1,.5);scene.add(s);splats.push({m:s,t:now+10});if(splats.length>30){scene.remove(splats[0].m);splats.shift()}done=true}
   if(done){scene.remove(w.m);webs.splice(i,1)}}
@@ -781,12 +792,17 @@ const NB=44,birds=new THREE.InstancedMesh((()=>{const g=new THREE.BufferGeometry
 birds.frustumCulled=false;scene.add(birds);
 const flocks=[[0,-80],[-260,120],[260,40],[52,-360]].map(([x,z])=>({c:new V3(x,topAt(x,z,500)+14,z),off:new V3(),dir:new V3(),flee:0}));
 function lifeStep(dt,now,night){
- for(const h of helis){h.a+=h.s*dt;const x=h.cx+Math.cos(h.a)*h.r,z=h.cz+Math.sin(h.a)*h.r,y=h.h+Math.sin(h.a*2)*6,sg=Math.sign(h.s),tx=-Math.sin(h.a)*sg,tz=Math.cos(h.a)*sg;
+ for(const h of helis){
+  if(h.fall){const P=h.g.position;h.fall.y-=20*dt;P.addScaledVector(h.fall,dt);h.g.rotation.y+=5*dt;h.g.rotation.z+=1.2*dt;h.rot.rotation.y+=12*dt;h.cone.visible=h.spot.visible=false;
+   if(P.y<=Math.max(-.9,topAt(P.x,P.z,P.y))+1||inBox(P)){burst(P);h.fall=null;h.down=now+30;h.g.visible=false}continue}
+  if(h.down>now)continue;h.g.visible=true;
+  const kg=h===helis[0]&&KONG.alive&&!KONG.dying;h.kb=(h.kb||0)+((kg?1:0)-(h.kb||0))*Math.min(1,.4*dt);const kb=h.kb,cx=h.cx+(KT.x-h.cx)*kb,cz=h.cz+(KT.z-h.cz)*kb,hr=h.r+(60-h.r)*kb,hy=h.h+(KT.y-12-h.h)*kb;
+  h.a+=h.s*dt;const x=cx+Math.cos(h.a)*hr,z=cz+Math.sin(h.a)*hr,y=hy+Math.sin(h.a*2)*6,sg=Math.sign(h.s),tx=-Math.sin(h.a)*sg,tz=Math.cos(h.a)*sg;
   h.g.position.set(x,y,z);h.g.rotation.set(-.12,Math.atan2(-tx,-tz),0,'YXZ');h.rot.rotation.y+=28*dt;h.tail.rotation.x+=40*dt;h.blink.visible=now%1<.15;
   // луч прожектора скользит по улицам и крышам впереди по курсу
-  const sx=x+tx*30+Math.sin(now*.7+h.r)*25,sz=z+tz*30+Math.cos(now*.6+h.r)*25,sy=Math.max(0,topAt(sx,sz,500))+.15;
+  let sx=x+tx*30+Math.sin(now*.7+h.r)*25,sz=z+tz*30+Math.cos(now*.6+h.r)*25,sy=Math.max(0,topAt(sx,sz,500))+.15;if(kb>.5){sx=KONG.c.x;sy=KONG.c.y;sz=KONG.c.z}
   h.spot.position.set(sx,sy,sz);t2.set(sx-x,sy-y+1.5,sz-z);const l=t2.length();h.cone.position.set(x,y-1.5,z);h.cone.quaternion.setFromUnitVectors(DOWN,t2.divideScalar(l));h.cone.scale.set(1,l,1);
-  h.cone.material.opacity=.11*night;h.spot.material.opacity=.5*night;h.cone.visible=h.spot.visible=night>.25}
+  h.cone.material.opacity=.11*night;h.spot.material.opacity=.5*night;h.cone.visible=night>.25;h.spot.visible=night>.25&&kb<=.5}
  const Lt=EL.z1-EL.z0-80,s=(now*18)%(2*Lt),zz=EL.z0+40+(s<Lt?s:2*Lt-s);train.forEach((c,n)=>c.position.set(EL.x,EL.y+2.05,zz+(n-1.5)*15.6));
  // голуби кружат, а если подлететь ближе 16 м — разлетаются и потом возвращаются
  for(const F of flocks){if(F.flee<=0&&Math.hypot(p.x-F.c.x-F.off.x,p.y-F.c.y-F.off.y,p.z-F.c.z-F.off.z)<16){F.flee=3;F.dir.set(F.c.x+F.off.x-p.x,0,F.c.z+F.off.z-p.z).normalize()}
@@ -832,13 +848,13 @@ function rainStep(dt){rainL.visible=rainA>.02;if(!rainL.visible)return;rainL.pos
 // связь через публичный MQTT-брокер shiftr.io на порту 443 (нестандартные порты в части сетей закрыты), свой сервер не нужен.
 // каналы комнаты: p/<id> — ник (retained, брокер стирает его при выходе), s/<id> — состояние героя до 8 раз в секунду, c — чат.
 // всё входящее — чужие данные: числа проверяются, тексты чистятся и выводятся только как текст
-const NET_URL='wss://public.cloud.shiftr.io',NET_ID=Math.random().toString(36).slice(2,10),NS=35,
- ROOM=((new URLSearchParams(location.search).get('room')||'city').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,24))||'city',NP='webswingcity26/'+ROOM+'/';
+const NET_URL='wss://public.cloud.shiftr.io',NET_ID=Math.random().toString(36).slice(2,10),NS=38,
+ ROOM=((new URLSearchParams(location.search).get('room')||'city').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,24))||'city',NP='webswingcity27/'+ROOM+'/';
 const cleanTxt=(s,n)=>String(s||'').replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩]/g,'').trim().slice(0,n);
 let netOnT=0,net=null,netOn=false,netT=0,netUIT=0,myName=cleanTxt((()=>{try{return localStorage.getItem(SAVE+'.name')}catch(_){return''}})(),16);
 // у каждого игрока свой цвет подсветки — по его id, одинаковый у всех
 const PCOL=[0x4dd2ff,0x7dff6a,0xffb347,0xff6ad5,0xffe14d,0xa98bff,0x5affc8,0xff7a5a],pcol=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))>>>0;return PCOL[h%PCOL.length]},hexc=n=>'#'+n.toString(16).padStart(6,'0');
-const peersMP=new Map(),hand2=new V3(),tmp2=new V3(),ipQ=new THREE.Quaternion(),ipQ2=new THREE.Quaternion(),netEl=$('net'),netS=$('netS'),chatEl=$('chat'),chatIn=$('chatIn'),nickIn=$('nick');
+const xRate=new Map(),peersMP=new Map(),hand2=new V3(),tmp2=new V3(),ipQ=new THREE.Quaternion(),ipQ2=new THREE.Quaternion(),netEl=$('net'),netS=$('netS'),chatEl=$('chat'),chatIn=$('chatIn'),nickIn=$('nick');
 function netStart(){if(typeof mqtt==='undefined'){netUI();return}
  net=mqtt.connect(NET_URL,{username:'public',password:'public',clientId:'wsc-'+NET_ID,keepalive:20,reconnectPeriod:4000,connectTimeout:10000,will:{topic:NP+'p/'+NET_ID,payload:'',retain:true,qos:0}});
  net.on('connect',()=>{netOn=true;netOnT=performance.now();net.subscribe(NP+'#');netHello();netUI()});
@@ -847,23 +863,29 @@ function netStart(){if(typeof mqtt==='undefined'){netUI();return}
 function netHello(){if(netOn&&myName)net.publish(NP+'p/'+NET_ID,JSON.stringify({n:myName}),{retain:true})}
 function netBye(){if(netOn){net.publish(NP+'p/'+NET_ID,'',{retain:true});net.end()}}
 function peerMP(id){let o=peersMP.get(id);if(!o){o={name:'Паук',col:pcol(id),buf:[],rx:performance.now(),model:null};peersMP.set(id,o)}return o}
-function freeRemote(o){scene.remove(o.model,o.web,o.tag,o.halo,o.drone);o.tag.material.map.dispose();o.tag.material.dispose();o.halo.material.dispose();o.om.dispose();o.model=null}
+function freeRemote(o){scene.remove(o.model,o.web,o.tag,o.halo,o.drone);for(const n in o.vm)scene.remove(o.vm[n].g);o.vm={};o.vk=0;o.tag.material.map.dispose();o.tag.material.dispose();o.halo.material.dispose();o.om.dispose();o.model=null}
 function dropPeer(id){const o=peersMP.get(id);if(o&&o.model)freeRemote(o);peersMP.delete(id)}
 function netMsg(topic,buf){if(!topic.startsWith(NP)||buf.length>2048)return;const k=topic.slice(NP.length).split('/'),kind=k[0],pid=k[1]||'';if(pid===NET_ID)return;
  let d=null;if(buf.length)try{d=JSON.parse(buf.toString())}catch(_){return}
  if(kind==='b'){bossMsg(pid,d);return}
- if(kind==='x'){if(d&&d.id!==NET_ID&&Array.isArray(d.p)&&d.p.length===3&&d.p.every(Number.isFinite))burst(new V3(cl(d.p[0],-700,700),cl(d.p[1],-50,700),cl(d.p[2],-700,700)));return}
+ // x — взрыв (p, сила r — бьёт по своей технике) или старт ракеты/снаряда чужой техники (s)
+ if(kind==='x'){if(!d||d.id===NET_ID||typeof d.id!=='string'||!/^[a-z0-9]{1,12}$/.test(d.id))return;
+  {const pn=performance.now();if(xRate.size>64)xRate.clear();const r=xRate.get(d.id)||{t:0,n:0};if(pn-r.t>1000){r.t=pn;r.n=0}xRate.set(d.id,r);if(++r.n>12)return}
+  if(v3ok(d.p)){const at=new V3(cl(d.p[0],-700,700),cl(d.p[1],-50,700),cl(d.p[2],-700,700)),r=Number.isFinite(d.r)?cl(d.r,0,16):0;burst(at);if(r>10)puff(sphG,0xffd27a,at,1.2,3,.7,.8);if(r)pvpSplash(at,r,r>10?90:40)}
+  else if(Array.isArray(d.s)&&d.s.length===7&&d.s.every(Number.isFinite)&&SCODE[d.s[0]]){const q=d.s;addVShot(SCODE[q[0]],vt1.set(cl(q[1],-700,700),cl(q[2],-50,700),cl(q[3],-700,700)),vt2.set(cl(q[4],-160,160),cl(q[5],-160,160),cl(q[6],-160,160)),true)}
+  return}
  const now=performance.now(),okId=/^[a-z0-9]{1,12}$/.test(pid);
  if(kind==='p'&&okId){if(!d){dropPeer(pid);return}peerMP(pid).name=cleanTxt(d.n,16)||'Паук'}
  else if(kind==='s'&&okId&&Array.isArray(d)&&d.length===NS&&d.every(Number.isFinite)){
   // своё время отправителя переводим в своё: смещение — минимальная задержка, медленно подтягивается вверх
   const o=peerMP(pid),raw=now-d[0];o.off=o.off===undefined?raw:Math.min(raw,o.off+(now-o.rx)*.02);o.rx=now;o.buf.push({t:d[0]+o.off,d});if(o.buf.length>24)o.buf.shift()}
  else if(kind==='c'&&d&&typeof d.t==='string'&&d.id!==NET_ID){const o=peersMP.get(cleanTxt(d.id,12));chatAdd(o?o.name:cleanTxt(d.n,16)||'Паук',cleanTxt(d.t,140),o?o.col:0x6fd3ff)}}
-function netState(){const r=x=>Math.round(x*100)/100,q=hero.quaternion,we=web.visible?(strike?t2.set(strike.g.position.x,strike.g.position.y+1.2,strike.g.position.z):anchorVis):null;
+// техника в состоянии: 28 — вид (0 нет, 1 дрон … 5 танк), 29–31 — позиция, 32 — курс, 33 — наклон, 34 — огонь очередью, 35–36 — прицел, 37 — фаза шага или крен
+function netState(){const dn=drone.on,vk=dn?1:ride.k,VP=dn?drone.pos:ride.pos,vf=(dn||ride.k===2||ride.k===3)&&k.fire||ride.k===5&&k.fire2?1:0,r=x=>Math.round(x*100)/100,q=hero.quaternion,we=web.visible?(strike?t2.set(strike.g.position.x,strike.g.position.y+1.2,strike.g.position.z):anchorVis):null;
  return[Math.round(performance.now()),r(hero.position.x),r(hero.position.y),r(hero.position.z),r(q.x),r(q.y),r(q.z),r(q.w),r(body.rotation.x),r(body.position.y),
   r(A[0].sh.rotation.x),r(A[0].sh.rotation.z),r(A[0].el.rotation.x),r(A[1].sh.rotation.x),r(A[1].sh.rotation.z),r(A[1].el.rotation.x),
   r(L[0].h.rotation.x),r(L[0].h.rotation.z),r(L[0].kn.rotation.x),r(L[1].h.rotation.x),r(L[1].h.rotation.z),r(L[1].kn.rotation.x),
-  we?1:0,we?r(we.x):0,we?r(we.y):0,we?r(we.z):0,suitI,SU.iron&&!onG?1:0,drone.on?1:0,r(drone.pos.x),r(drone.pos.y),r(drone.pos.z),r(drone.yaw),r(droneG.rotation.x),drone.on&&k.fire?1:0]}
+  we?1:0,we?r(we.x):0,we?r(we.y):0,we?r(we.z):0,suitI,SU.iron&&!onG?1:0,vk,r(VP.x),r(VP.y),r(VP.z),r(dn?drone.yaw:ride.yaw),r(dn?droneG.rotation.x:ride.tilt),vf,r(dn?drone.yaw:ride.ay),r(dn?0:ride.ap),r(dn?0:ride.aux)]}
 function nameTex(s,col){const c=document.createElement('canvas');c.width=256;c.height=64;const g=c.getContext('2d');g.font='bold 30px "Trebuchet MS",system-ui,sans-serif';const w=Math.min(250,g.measureText(s).width+28);
  g.fillStyle='rgba(10,15,36,.78)';g.strokeStyle=hexc(col);g.lineWidth=4;g.beginPath();g.roundRect?g.roundRect(128-w/2,8,w,48,14):g.rect(128-w/2,8,w,48);g.fill();g.stroke();g.fillStyle='#e8f1ff';g.textAlign='center';g.textBaseline='middle';g.fillText(s,128,33,236);return new THREE.CanvasTexture(c)}
 // модель чужого игрока — копия героя: те же меши и суставы, свои материалы костюма, свой ник и своя нить;
@@ -874,13 +896,15 @@ function remoteModel(o){const c=hero.clone(true),src=[],dst=[],mp=new Map();hero
  for(const x of suitMesh){const h=new THREE.Mesh(x.geometry,om);h.scale.setScalar(1.13);x.add(h)}
  o.parts={body:mp.get(body),A:A.map(a=>({sh:mp.get(a.sh),el:mp.get(a.el)})),L:L.map(l=>({h:mp.get(l.h),kn:mp.get(l.kn)}))};
  o.flames=[];c.traverse(x=>{if(x.userData.flame)o.flames.push(x)});
+ o.vm={};o.vk=0;o.pv=new V3();o.vpt=undefined;
  o.drone=droneG.clone(true);o.drone.visible=false;o.dRot=[];o.drone.traverse(x=>{if(x.userData.rotor)o.dRot.push(x)});scene.add(o.drone);
  o.model=c;o.web=new THREE.Mesh(web.geometry,web.material);o.web.frustumCulled=false;o.web.visible=false;
  o.tag=new THREE.Sprite(new THREE.SpriteMaterial({map:nameTex(o.name,o.col),depthWrite:false,depthTest:false,transparent:true}));o.tag.renderOrder=10;o.tagName=o.name;o.suit=-1;
  o.halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:o.col,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));o.halo.scale.setScalar(4.5);scene.add(c,o.web,o.tag,o.halo)}
 function applySuit(o,i){const S=suitSet(i);o.model.traverse(x=>{if(x.isMesh&&x.userData.base){const b=x.userData.base;x.material=Array.isArray(b)?b.map(m=>S.get(m)||m):S.get(b)||b}});applyLook(o.model,!!SUITS[i].iron)}
-function netStep(now,on){
- const busy=drone.on||v.lengthSq()>.25||anchor||crawl||strike||flip>0||relT>0||now-atkT<.4;
+let netLT=0;
+function netStep(now,on){const ndt=cl(now-netLT,0,.05);netLT=now;
+ const busy=drone.on||ride.k||v.lengthSq()>.25||anchor||crawl||strike||flip>0||relT>0||now-atkT<.4;
  if(netOn&&now-netT>(on&&busy?.12:1)){netT=now;net.publish(NP+'s/'+NET_ID,JSON.stringify(netState()))}
  // показываем чужих с отставанием 260 мс, интерполируя между полученными снимками
  const pn=performance.now(),rt=pn-260;
@@ -896,10 +920,20 @@ function netStep(now,on){
   P.L[0].h.rotation.x=Lp(16);P.L[0].h.rotation.z=Lp(17);P.L[0].kn.rotation.x=Lp(18);P.L[1].h.rotation.x=Lp(19);P.L[1].h.rotation.z=Lp(20);P.L[1].kn.rotation.x=Lp(21);
   const s=cl(Math.round(db[26]),0,SUITS.length-1);if(s!==o.suit){o.suit=s;applySuit(o,s)}
   {const fl=db[27]>.5&&SUITS[s].iron;for(const f of o.flames){f.visible=fl;if(fl)f.scale.set(1,.8+Math.random()*.4,1)}}
-  {const don=db[28]>.5,D=o.drone;D.visible=don;if(don){D.position.set(Lp(29),Lp(30),Lp(31));D.rotation.set(Lp(33),db[32],0,'YXZ');for(const r of o.dRot)r.rotation.y+=.7;
-   if(db[34]>.5&&pn>(o.fireT||0)){o.fireT=pn+120;D.updateMatrixWorld(true);addShot(D.localToWorld(new V3(0,-.1,-.52)),t2.set(-Math.sin(db[32]),0,-Math.cos(db[32])),true)}}}
+  {const vk=cl(Math.round(db[28]),0,5),don=vk===1,D=o.drone;D.visible=don;if(don){D.position.set(Lp(29),Lp(30),Lp(31));D.rotation.set(Lp(33),db[32],0,'YXZ');for(const r of o.dRot)r.rotation.y+=.7;
+   if(db[34]>.5&&pn>(o.fireT||0)){o.fireT=pn+120;D.updateMatrixWorld(true);addShot(D.localToWorld(new V3(0,-.1,-.52)),t2.set(-Math.sin(db[32]),0,-Math.cos(db[32])),true)}}
+   // техника: своя копия модели, поза по сети; очередь рисуем сами по флагу огня; в роботе, вертолёте и танке героя не видно, ник — над техникой
+   if(o.vk>1&&o.vk!==vk&&o.vm[o.vk])o.vm[o.vk].g.visible=false;o.vk=vk;
+   if(vk>1){const V0=o.vm[vk]||(o.vm[vk]=vClone(vk)),La=i=>{const q=db[i]-da[i];return da[i]+Math.atan2(Math.sin(q),Math.cos(q))*u},Q=V0.g.position,ox=Q.x,oy=Q.y,oz=Q.z;
+    V0.g.visible=true;Q.set(cl(Lp(29),-700,700),cl(Lp(30),-50,700),cl(Lp(31),-700,700));o.vyaw=La(32);if(o.vpt!==undefined&&now>o.vpt+1e-4)o.pv.set(Q.x-ox,Q.y-oy,Q.z-oz).divideScalar(now-o.vpt);o.vpt=now;
+    vPose(V0,vk,o.vyaw,La(33),La(35),Lp(36),vk===5?La(37):Lp(37),ndt,now);V0.g.updateMatrixWorld(true);
+    if(db[34]>.5&&pn>(o.fireT||0)&&vk!==4){const T=vk===2?'c':'b',a=db[35],e=db[36];o.fireT=pn+(vk===2?130:vk===3?70:90);o.gun=-(o.gun||1);
+     const mz=vk===2?V0.P[o.gun<0?'aL':'aR'].localToWorld(vt1.set(o.gun*.3,-4.4,-4.5)):vk===3?V0.P.body.localToWorld(vt1.set(0,-1.3,-3.4)):V0.P.tur.localToWorld(vt1.set(.8,1.75,-.6));
+     addVShot(T,mz,vt2.set(-Math.sin(a)*Math.cos(e),Math.sin(e),-Math.cos(a)*Math.cos(e)).multiplyScalar(ST[T].sp),true)}
+    m.visible=vk===4;if(vk!==4)m.position.set(Q.x,Q.y+VEH[vk].seat,Q.z);o.tagUp=vk===4?0:VEH[vk].top-VEH[vk].seat}
+   else{m.visible=true;o.pv.set(0,0,0);o.tagUp=0}}
   if(o.tagName!==o.name){o.tag.material.map.dispose();o.tag.material.map=nameTex(o.name,o.col);o.tagName=o.name}
-  const ts=cl(m.position.distanceTo(camera.position)*.045,1,9);o.tag.scale.set(2.8*ts,.7*ts,1);o.tag.position.set(m.position.x,m.position.y+1.2+.55*ts,m.position.z);o.halo.position.copy(m.position);
+  const ts=cl(m.position.distanceTo(camera.position)*.045,1,9);o.tag.scale.set(2.8*ts,.7*ts,1);o.tag.position.set(m.position.x,m.position.y+1.2+.55*ts+(o.tagUp||0),m.position.z);o.halo.position.copy(m.position);
   if(db[22]>.5){m.updateMatrixWorld(true);P.A[1].el.localToWorld(hand2.set(0,-.3,0));tmp2.set(db[23],db[24],db[25]).sub(hand2);const l=tmp2.length();
    if(l>.01&&l<250){o.web.position.copy(hand2);o.web.scale.set(1,l,1);o.web.quaternion.setFromUnitVectors(UP,tmp2.divideScalar(l));o.web.visible=true}else o.web.visible=false}
   else o.web.visible=false}
@@ -924,16 +958,27 @@ $('newRoom').addEventListener('click',()=>{const u=new URL(location.href);u.sear
 $('bC').addEventListener('touchstart',e=>{e.preventDefault();const t=prompt('Сообщение в чат');if(t)chatSend(t)});
 addEventListener('pagehide',netBye);
 
-// --- босс: гигантский Губка Боб выходит из залива и бродит по воде вдоль берегов ---
-// в мультиплеере босс общий: его считает «ведущий» — игрок с наименьшим id в комнате. Ведущий шлёт состояние (b/s) и пузыри (b/e),
-// остальные присылают ему урон (b/h); попадания босса по себе каждый считает сам по синхронной позе и таймеру атаки
-const BOSS_NAME='Гигантский Губка Боб',BM=['идёт','топает','пускает пузыри','бьёт рукой','опутан паутиной','падает'];
-const boss={alive:false,dying:false,x:-120,z:-80,h:0,tx:-120,tz:-80,th:0,hp:0,max:1,mode:0,mT:0,phase:1,webs:0,next:performance.now()/1000+75,dmgMe:0,rewarded:false,
- lm:-1,hitDone:false,slam:false,sx:0,sz:0,sendT:0,bubN:0,bubT:0,stepT:0,stepS:0,sink:0,tgt:new V3()},bubbles=[];
-let bubSeq=0,onBoss=false;
-const bossG=new THREE.Group(),BP={};bossG.visible=false;scene.add(bossG);
-// модель ~26 м: тело-губка 12×13×5 с лицом спереди (-z), рубашка, галстук, шорты, тонкие ноги в носках, руки из коротких рукавов
-{const YEL='#f3dd3c',Lm=c=>new THREE.MeshLambertMaterial({color:c}),
+// --- боссы: Губка Боб с Патриком выходят из залива вдвоём, Кинг-Конг забирается на самую высокую башню ---
+// в мультиплеере боссы общие: их считает «ведущий» (см. isBossHost). Ведущий шлёт состояние всех боссов (b/s) и снаряды — пузыри и глыбы (b/e),
+// остальные присылают ему урон (b/h); попадания боссов по себе каждый считает сам по синхронной позе и таймеру атаки
+const BOSSES=[],bubbles=[],rocks=[],LmB=c=>new THREE.MeshLambertMaterial({color:c}),stompGeo=new THREE.RingGeometry(.92,1,64).rotateX(-Math.PI/2);
+let bubSeq=0,onBoss=null,comboT=0,comboOn=false,bossSendT=0;
+const bl=new V3(),bw=new V3(),r10=a=>[a.x,a.y,a.z].map(x=>Math.round(x*10)/10),v3ok=a=>Array.isArray(a)&&a.length===3&&a.every(Number.isFinite);
+sfx.roar=()=>{noise(1.6,'lowpass',700,90,.8);tone(62,1.3,.45,'sawtooth');tone(93,1,.25,'sawtooth',.1)};
+// box — тело в локальных осях босса: [полуширина, низ, верх, полуглубина]; строка в панели боссов у каждого своя
+function mkBoss(key,name,col,BM,box,o){const g=new THREE.Group();g.visible=false;scene.add(g);
+ const beam=new THREE.Mesh(beamGeo,new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.25,fog:false,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));beam.visible=false;
+ const ring=new THREE.Mesh(stompGeo,new THREE.MeshBasicMaterial({color:0xdff6ff,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));scene.add(beam,ring);
+ const el=document.createElement('div');el.className='bb';el.innerHTML='<b></b> · <span></span><span class="bar"><i></i></span>';el.firstChild.textContent=name;el.firstChild.style.color=hexc(col);el.style.display='none';$('boss').append(el);
+ const B=Object.assign({key,name,col,BM,box,g,beam,ring,el,stEl:el.children[1],hpEl:el.querySelector('i'),P:{},alive:false,dying:false,x:0,y:-1.2,z:0,h:0,tx:0,ty:-1.2,tz:0,th:0,hp:0,max:1,mode:0,mT:0,phase:1,webs:0,next:1e12,
+  dmgMe:0,rewarded:false,lm:-1,hitDone:false,slam:false,thrown:false,sx:0,sz:0,vy:0,stepT:0,stepS:0,sink:0,tgt:new V3(),aim:new V3(),c:new V3()},o);
+ B.T={g:{position:B.aim},ko:false,boss:B};BOSSES.push(B);return B}
+const SB=mkBoss('s','Губка Боб',0xffe14d,['идёт','топает','пускает пузыри','бьёт рукой','опутан паутиной','падает'],[6,9,26,2.6],{reward:5000,intro:'Губка Боб и Патрик вышли из залива! Жёлтый и розовый столбы на карте'});
+const PAT=mkBoss('p','Патрик',0xff8fb8,['бежит','таранит','прыгает пузом','даёт оплеуху','опутан паутиной','падает'],[4.6,1,22,3.6],{reward:4000});
+const KONG=mkBoss('k','Кинг-Конг',0xff8a3d,['сидит на башне','бьёт себя в грудь','бросает глыбу','отмахивается','опутан паутиной','падает с башни'],[6,1,17.5,3.6],{reward:8000,intro:'Кинг-Конг забрался на самую высокую башню! Раскачивайтесь вокруг неё и бейте'});
+SB.next=performance.now()/1000+75;PAT.next=0;KONG.next=performance.now()/1000+200;
+// Губка Боб ~26 м: тело-губка 12×13×5 с лицом спереди (-z), рубашка, галстук, шорты, тонкие ноги в носках, руки из коротких рукавов
+{const YEL='#f3dd3c',
  tex=(w,h,face)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle=YEL;g.fillRect(0,0,w,h);
   for(let n=0;n<60;n++){const r=w*(.012+R(n*9.1+w)*.035);g.fillStyle=R(n*2.2+h)>.5?'#bdb52e':'#d4c430';g.beginPath();g.ellipse(R(n*3.3+w)*w,R(n*5.7+h)*h,r,r*(.7+R(n*1.7)*.5),R(n*4.4)*3,0,7);g.fill()}
   if(face){g.lineCap='round';
@@ -945,124 +990,248 @@ const bossG=new THREE.Group(),BP={};bossG.visible=false;scene.add(bossG);
    g.fillStyle='#fff';g.strokeStyle='#333';g.lineWidth=2;for(const tx of[.43,.51]){g.fillRect(tx*w,.655*h,.06*w,.07*h);g.strokeRect(tx*w,.655*h,.06*w,.07*h)}
    g.strokeStyle='#5a1010';g.lineWidth=5;g.beginPath();g.moveTo(.2*w,.585*h);g.quadraticCurveTo(.5*w,.68*h,.8*w,.585*h);g.stroke()}
   return new THREE.CanvasTexture(c)};
- const side=new THREE.MeshLambertMaterial({map:tex(256,256)}),front=new THREE.MeshLambertMaterial({map:tex(512,556,true)}),white=Lm(0xf4f4f0),red=Lm(0xd8262b),yel=Lm(0xf3dd3c);
- const b=BP.body=new THREE.Group();bossG.add(b);
+ const side=new THREE.MeshLambertMaterial({map:tex(256,256)}),front=new THREE.MeshLambertMaterial({map:tex(512,556,true)}),white=LmB(0xf4f4f0),red=LmB(0xd8262b),yel=LmB(0xf3dd3c),P=SB.P;
+ const b=P.body=new THREE.Group();SB.g.add(b);
  M(new THREE.BoxGeometry(12,13,5),[side,side,side,side,side,front],b,0,19.5,0);
- M(new THREE.BoxGeometry(12.05,1,5.05),white,b,0,12.5,0);M(new THREE.BoxGeometry(12.1,3,5.1),Lm(0x7a4b25),b,0,10.5,0);M(new THREE.BoxGeometry(12.15,.5,5.15),Lm(0x1a1a1a),b,0,11.7,0);
+ M(new THREE.BoxGeometry(12.05,1,5.05),white,b,0,12.5,0);M(new THREE.BoxGeometry(12.1,3,5.1),LmB(0x7a4b25),b,0,10.5,0);M(new THREE.BoxGeometry(12.15,.5,5.15),LmB(0x1a1a1a),b,0,11.7,0);
  for(const x of[-4.5,-1.5,1.5,4.5])M(new THREE.BoxGeometry(1.4,.32,.1),white,b,x,11.7,-2.6);
  M(new THREE.BoxGeometry(1.1,2.4,.25),red,b,0,11.9,-2.65);M(new THREE.BoxGeometry(.9,.7,.3),red,b,0,12.9,-2.62);
  M(new THREE.CylinderGeometry(.55,.65,3.2,14),side,b,0,19.6,-4.1).rotation.x=Math.PI/2-.25;M(new THREE.SphereGeometry(.8,14,10),side,b,0,20,-5.7);
- BP.legs=[-1,1].map(s=>{const pv=new THREE.Group();pv.position.set(s*2.8,9,0);b.add(pv);
+ P.legs=[-1,1].map(s=>{const pv=new THREE.Group();pv.position.set(s*2.8,9,0);b.add(pv);
   M(new THREE.CylinderGeometry(.5,.5,9,10),yel,pv,0,-4.5,0);M(new THREE.CylinderGeometry(.75,.75,3.2,12),white,pv,0,-6.6,0);
-  M(new THREE.CylinderGeometry(.77,.77,.35,12),red,pv,0,-5.4,0);M(new THREE.CylinderGeometry(.77,.77,.35,12),Lm(0x2f6fd0),pv,0,-5.95,0);
-  M(new THREE.SphereGeometry(1,14,10),Lm(0x111111),pv,0,-8.4,-.9,1.35,.85,2.3);return pv});
- BP.arms=[-1,1].map(s=>{const pv=new THREE.Group();pv.position.set(s*6.6,18.5,0);b.add(pv);
+  M(new THREE.CylinderGeometry(.77,.77,.35,12),red,pv,0,-5.4,0);M(new THREE.CylinderGeometry(.77,.77,.35,12),LmB(0x2f6fd0),pv,0,-5.95,0);
+  M(new THREE.SphereGeometry(1,14,10),LmB(0x111111),pv,0,-8.4,-.9,1.35,.85,2.3);return pv});
+ P.arms=[-1,1].map(s=>{const pv=new THREE.Group();pv.position.set(s*6.6,18.5,0);b.add(pv);
   M(new THREE.CylinderGeometry(1,1.2,1.6,12),white,pv,s*.2,0,0).rotation.z=Math.PI/2;
   M(new THREE.CylinderGeometry(.42,.42,8,10),yel,pv,s*.6,-4.2,0);M(new THREE.SphereGeometry(1,12,10),yel,pv,s*.6,-8.6,0);return pv})}
-const stompRing=new THREE.Mesh(new THREE.RingGeometry(.92,1,64).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xdff6ff,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));scene.add(stompRing);
-const bossBeam=new THREE.Mesh(beamGeo,new THREE.MeshBasicMaterial({color:0xffe14d,transparent:true,opacity:.25,fog:false,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));bossBeam.visible=false;scene.add(bossBeam);
-const bubM=new THREE.MeshPhongMaterial({color:0xd6f4ff,transparent:true,opacity:.38,shininess:120,specular:0xffffff,depthWrite:false}),bubGeo=new THREE.SphereGeometry(1.3,16,12);
-const bl=new V3(),bw=new V3(),bossAimV=new V3(),bossT={g:{position:bossAimV},ko:false,boss:true},bossHpEl=$('bossHp'),bossSt=$('bossSt');
-// перевод между миром и локальными осями босса (группа стоит на y=-1.2 и повёрнута на h)
-const bossLoc=(x,y,z,o)=>{const c=Math.cos(boss.h),s=Math.sin(boss.h),dx=x-boss.x,dz=z-boss.z;return o.set(dx*c-dz*s,y+1.2,dx*s+dz*c)};
-const bossWorld=(lx,ly,lz,o)=>{const c=Math.cos(boss.h),s=Math.sin(boss.h);return o.set(boss.x+lx*c+lz*s,ly-1.2,boss.z-lx*s+lz*c)};
-function bossInside(pos,pad){if(!bossG.visible||boss.dying)return false;bossLoc(pos.x,pos.y,pos.z,bl);return Math.abs(bl.x)<6+pad&&bl.y>9-pad&&bl.y<26+pad&&Math.abs(bl.z)<2.6+pad}
-function bossInAim(cone,maxD){if(!boss.alive||boss.dying)return false;camera.getWorldDirection(dir);t2.set(boss.x-camera.position.x,17-camera.position.y,boss.z-camera.position.z);const l=t2.length();return l<maxD&&t2.dot(dir)/l>cone}
-// босс ходит только по воде: все углы его следа (±8 по x, ±5 по z) — над водой
-function waterOK(x,z){if(Math.abs(x)>500||Math.abs(z)>420)return false;for(const[ox,oz]of[[-8,-5],[8,-5],[-8,5],[8,5],[0,0]])if(landAt(Math.round((x+ox)/SX),Math.round((z+oz)/SZ)))return false;return true}
+// Патрик ~22 м: розовая звезда — конус корпуса с острой макушкой, ноги-конусы, руки-лучи в стороны, зелёные шорты в фиолетовых цветах
+{const pink=LmB(0xf4a3b5),P=PAT.P,b=P.body=new THREE.Group();PAT.g.add(b);
+ const shorts=new THREE.MeshLambertMaterial({map:(()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const g=c.getContext('2d');g.fillStyle='#86c540';g.fillRect(0,0,256,64);
+  for(let n=0;n<14;n++){const x=R(n*3.1)*256,y=10+R(n*7.7)*44;g.fillStyle='#a352c9';for(let q=0;q<5;q++){const a=q*1.2566;g.beginPath();g.arc(x+Math.cos(a)*6,y+Math.sin(a)*6,5,0,7);g.fill()}g.fillStyle='#f3e05a';g.beginPath();g.arc(x,y,3.5,0,7);g.fill()}
+  return new THREE.CanvasTexture(c)})()});
+ M(new THREE.CylinderGeometry(5.1,5.4,3.8,24),shorts,b,0,7.4,0,1,1,.82);
+ M(new THREE.CylinderGeometry(1.5,5.1,12.5,24),pink,b,0,15.5,0,1,1,.8);M(new THREE.SphereGeometry(1.5,14,10),pink,b,0,21.75,0,1,1,.8);
+ const wh=LmB(0xffffff),bk=new THREE.MeshBasicMaterial({color:0x111111});
+ for(const s of[-1,1]){M(new THREE.SphereGeometry(.8,12,10),wh,b,s*.85,18,-1.85,1,1.35,.5);M(new THREE.SphereGeometry(.3,8,6),bk,b,s*.75,17.8,-2.25);M(new THREE.BoxGeometry(1.1,.18,.18),bk,b,s*.95,19.35,-1.8).rotation.z=-s*.25}
+ M(new THREE.TorusGeometry(1.3,.24,8,18,Math.PI),LmB(0x6b1427),b,0,16.7,-2.4,1,1,.6).rotation.z=Math.PI;
+ P.legs=[-1,1].map(s=>{const pv=new THREE.Group();pv.position.set(s*2.6,6.6,0);b.add(pv);M(new THREE.CylinderGeometry(2.3,1,6.6,14),pink,pv,0,-3.3,0,1,1,.85);return pv});
+ // рука-луч: плечо крутится вокруг вертикали (замах вперёд-назад), сам луч наклонён в сторону
+ P.arms=[-1,1].map(s=>{const sh=new THREE.Group();sh.position.set(s*3.2,15.2,0);b.add(sh);const a=new THREE.Group();a.rotation.z=s*1.05;sh.add(a);M(new THREE.CylinderGeometry(.6,1.9,8,14),pink,a,0,-4,0,.85,1,.85);return sh})}
+// Кинг-Конг ~17 м: сутулый, длинные руки до земли, светлая морда и грудь, жёлтые глаза
+{const fur=LmB(0x2b2321),skin=LmB(0x5b4a42),dark=new THREE.MeshBasicMaterial({color:0x141010}),P=KONG.P,b=P.body=new THREE.Group();KONG.g.add(b);
+ M(new THREE.SphereGeometry(2.6,14,10),fur,b,0,6.6,.4,1.35,1,1.1);
+ const tor=P.tor=new THREE.Group();tor.position.y=7;b.add(tor);
+ M(new THREE.SphereGeometry(4,16,12),fur,tor,0,4,0,1.3,1.15,.95);M(new THREE.SphereGeometry(3,14,10),skin,tor,0,3.6,-2.75,1.05,1,.45);
+ const hd=P.head=new THREE.Group();hd.position.set(0,8.2,-1.6);tor.add(hd);
+ M(new THREE.SphereGeometry(2,14,10),fur,hd,0,0,0,1,1.08,1.05);M(new THREE.SphereGeometry(1.6,14,10),skin,hd,0,-.35,-1.25,1.05,.95,.6);
+ M(new THREE.SphereGeometry(1.1,12,8),skin,hd,0,-1,-1.75,1.25,.75,.75);M(new THREE.BoxGeometry(2.9,.5,.7),fur,hd,0,.45,-1.85);
+ const eye=new THREE.MeshBasicMaterial({color:0xffc94a});for(const s of[-1,1]){M(new THREE.SphereGeometry(.22,8,6),eye,hd,s*.62,.08,-2.15);M(new THREE.SphereGeometry(.12,6,4),dark,hd,s*.35,-.85,-2.45)}
+ P.jaw=M(new THREE.BoxGeometry(1.3,.3,.3),dark,hd,0,-1.35,-2.35);
+ P.els=[];P.arms=[-1,1].map(s=>{const sh=new THREE.Group();sh.position.set(s*4.9,5.6,-.2);tor.add(sh);
+  M(new THREE.SphereGeometry(1.7,12,10),fur,sh,0,0,0);M(new THREE.CylinderGeometry(1.4,1.15,6,12),fur,sh,0,-3,0);
+  const el=new THREE.Group();el.position.y=-6;sh.add(el);M(new THREE.CylinderGeometry(1.15,1.45,5.4,12),fur,el,0,-2.7,0);M(new THREE.SphereGeometry(1.6,12,10),skin,el,0,-5.8,0,1,.85,1.1);P.els.push(el);return sh});
+ P.rock=M(new THREE.DodecahedronGeometry(1.8),LmB(0x6d6a66),P.els[1],0,-7.4,0);P.rock.visible=false;
+ P.legs=[-1,1].map(s=>{const hp=new THREE.Group();hp.position.set(s*2.3,6.2,.4);b.add(hp);M(new THREE.CylinderGeometry(1.6,1.3,3.6,12),fur,hp,0,-1.8,0);
+  const kn=new THREE.Group();kn.position.y=-3.6;hp.add(kn);M(new THREE.CylinderGeometry(1.3,1.05,2.2,12),fur,kn,0,-1.1,0);M(new THREE.BoxGeometry(2.4,.9,3.4),skin,kn,0,-2.35,-.6);return hp})}
+// крыша башни в духе Эмпайр-стейт (клетка 1,-1): Конг стоит у шпиля лицом к цели и, поворачиваясь, обходит шпиль по кругу
+const KT=(()=>{let T=null;for(const b of boxes['1,-1']||[])if(!T||b.h>T.h)T=b;return T?{x:(T.x0+T.x1)/2,y:T.h,z:(T.z0+T.z1)/2,r:Math.min(T.x1-T.x0,T.z1-T.z0)/2+1}:{x:52,y:270,z:-40,r:5.3}})();
+function kongPlace(B){B.x=KT.x-Math.sin(B.h)*KT.r;B.z=KT.z-Math.cos(B.h)*KT.r;B.y=KT.y}
+const kwave=new THREE.Mesh(new THREE.SphereGeometry(1,24,16),new THREE.MeshBasicMaterial({color:0xffd9a0,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));kwave.visible=false;scene.add(kwave);
+const bubM=new THREE.MeshPhongMaterial({color:0xd6f4ff,transparent:true,opacity:.38,shininess:120,specular:0xffffff,depthWrite:false}),bubGeo=new THREE.SphereGeometry(1.3,16,12),rockGeo=new THREE.DodecahedronGeometry(1.8),rockM=LmB(0x6d6a66);
+// перевод между миром и локальными осями босса (группа стоит на высоте y и повёрнута на h)
+const bossLoc=(B,x,y,z,o)=>{const c=Math.cos(B.h),s=Math.sin(B.h),dx=x-B.x,dz=z-B.z;return o.set(dx*c-dz*s,y-B.y,dx*s+dz*c)};
+const bossWorld=(B,lx,ly,lz,o)=>{const c=Math.cos(B.h),s=Math.sin(B.h);return o.set(B.x+lx*c+lz*s,ly+B.y,B.z-lx*s+lz*c)};
+function bossDist(B,pos){const b=B.box;bossLoc(B,pos.x,pos.y,pos.z,bl);return Math.hypot(bl.x-cl(bl.x,-b[0],b[0]),bl.y-cl(bl.y,b[1],b[2]),bl.z-cl(bl.z,-b[3],b[3]))}
+function bossInside(pos,pad){for(const B of BOSSES)if(B.alive&&!B.dying&&bossDist(B,pos)<=pad)return B;return null}
+function bossInAim(cone,maxD){camera.getWorldDirection(dir);let best=null,bc=cone;for(const B of BOSSES){if(!B.alive||B.dying)continue;t2.subVectors(B.c,camera.position);const l=t2.length(),c=t2.dot(dir)/l;if(l<maxD&&c>bc){bc=c;best=B}}return best}
+const bossAny=()=>BOSSES.some(B=>B.alive),peersN=()=>[...peersMP.values()].filter(o=>o.model).length;
+// гиганты ходят только по воде: все углы следа (±F по x и z) — над водой
+const SBF=[8,5],PATF=[6,5];
+function waterOK(x,z,F){F=F||SBF;if(Math.abs(x)>500||Math.abs(z)>420)return false;for(const[ox,oz]of[[-F[0],-F[1]],[F[0],-F[1]],[-F[0],F[1]],[F[0],F[1]],[0,0]])if(landAt(Math.round((x+ox)/SX),Math.round((z+oz)/SZ)))return false;return true}
 const WATER=[];for(let i=-NX;i<=NX;i++)for(let j=-NZ;j<=NZ;j++)if(waterOK(i*SX,j*SZ))WATER.push([i*SX,j*SZ]);
 // ведущий — игрок с наименьшим id среди тех, кто слал состояние последние 6 с; без сети ведущий ты сам
 let bossOwn='',bossOwnT=-1e9,bossOwnAlive=false;
 function isBossHost(){const pn=performance.now();
- // уступаем свежему чужому ведущему, если у него босс жив, а у нас нет, или у обоих одинаково, а его id меньше; чужое «босса нет» живой бой не обрывает
- if(pn-bossOwnT<2500&&(bossOwnAlive&&!boss.alive||bossOwnAlive===boss.alive&&bossOwn<NET_ID))return false;
+ // уступаем свежему чужому ведущему, если у него боссы живы, а у нас нет, или у обоих одинаково, а его id меньше; чужое «боссов нет» живой бой не обрывает
+ if(pn-bossOwnT<2500&&(bossOwnAlive&&!bossAny()||bossOwnAlive===bossAny()&&bossOwn<NET_ID))return false;
  if(netOn&&pn-netOnT<3000)return false;
  let m=NET_ID;for(const[id,o]of peersMP)if(pn-o.rx<6000&&o.buf.length&&id<m)m=id;return m===NET_ID}
-function bossAnnounce(){boss.dmgMe=0;boss.rewarded=false;BP.body.rotation.set(0,0,0);boss.sink=0;showToast(BOSS_NAME+' вышел из залива! Жёлтый столб на карте',4000);sfx.alarm()}
-function bossSpawn(nx,nz){let best=null,bd=1e9;for(const[x,z]of WATER){const d=Math.hypot(x-nx,z-nz);if(d>70&&d<bd){bd=d;best=[x,z]}}if(!best)best=[-120,-80];
- const n=1+[...peersMP.values()].filter(o=>o.model).length,b=boss;
- Object.assign(b,{alive:true,dying:false,x:best[0],z:best[1],tx:best[0],tz:best[1],h:Math.atan2(-(nx-best[0]),-(nz-best[1])),max:Math.min(1500,400+250*(n-1)),mode:0,mT:2,phase:1,webs:0});
- b.th=b.h;b.hp=b.max;bossAnnounce()}
-function bossCall(){if(boss.alive){showToast(BOSS_NAME+' уже в городе — жёлтый столб на карте');return}
- if(isBossHost())bossSpawn(p.x,p.z);else if(netOn){net.publish(NP+'b/h',JSON.stringify({call:1,x:Math.round(p.x),z:Math.round(p.z)}));showToast('Зовём босса…')}}
+function bossAnnounce(B){B.dmgMe=0;B.rewarded=false;B.P.body.rotation.set(0,0,0);B.sink=0;B.vy=0;if(B.intro){showToast(B.intro,4500);if(B===KONG)sfx.roar();else sfx.alarm()}}
+function bossInit(B,x,y,z,h,max){Object.assign(B,{alive:true,dying:false,x,y,z,tx:x,ty:y,tz:z,h,th:h,max,hp:max,mode:0,mT:2,phase:1,webs:0});bossAnnounce(B)}
+// Губка Боб встаёт в заливе ближе всего к позвавшему, Патрик — рядом с ним
+function spawnDuo(nx,nz){let best=null,bd=1e9;for(const[x,z]of WATER){const d=Math.hypot(x-nx,z-nz);if(d>70&&d<bd){bd=d;best=[x,z]}}if(!best)best=[-120,-80];
+ const n=1+peersN(),h=Math.atan2(-(nx-best[0]),-(nz-best[1]));let px=best[0],pz=best[1];
+ for(let a=0;a<8;a++){const x=best[0]+Math.cos(a*.785)*22,z=best[1]+Math.sin(a*.785)*22;if(waterOK(x,z,PATF)){px=x;pz=z;break}}
+ bossInit(SB,best[0],-1.2,best[1],h,Math.min(1500,400+250*(n-1)));bossInit(PAT,px,-1.2,pz,h,Math.min(1200,300+200*(n-1)))}
+function spawnKong(){const n=1+peersN();bossInit(KONG,KT.x,KT.y,KT.z,Math.atan2(-(p.x-KT.x),-(p.z-KT.z)),Math.min(2400,700+350*(n-1)));kongPlace(KONG);KONG.tx=KONG.x;KONG.tz=KONG.z}
+function bossSpawnW(w,x,z){if(w==='d'){if(!SB.alive&&!PAT.alive)spawnDuo(x,z)}else if(!KONG.alive)spawnKong()}
+// Y: сначала дуэт из залива, если он уже в городе — Кинг-Конг
+function bossCall(){const duo=!SB.alive&&!PAT.alive;if(!duo&&KONG.alive){showToast('Все боссы уже в городе — цветные столбы на карте');return}const w=duo?'d':'k';
+ if(isBossHost())bossSpawnW(w,p.x,p.z);else if(netOn){net.publish(NP+'b/h',JSON.stringify({call:w,x:Math.round(p.x),z:Math.round(p.z)}));showToast('Зовём босса…')}}
 // урон по боссу: у ведущего применяется сразу, остальные шлют его ведущему
-function bossHurt(n,label,web){if(!boss.alive||boss.dying)return;if(boss.mode===4)n*=1.5;boss.dmgMe+=n;score+=Math.round(n*2);sfx.punch();if(label)showToast(label);
- if(isBossHost())bossApply(n,web);else if(netOn)net.publish(NP+'b/h',JSON.stringify({d:Math.round(n),w:web?1:0}))}
-function bossApply(n,web){const b=boss;if(!b.alive||b.dying)return;b.hp=Math.max(0,b.hp-n);
- if(web&&b.mode!==4&&++b.webs>=4){b.mode=4;b.mT=4;b.webs=0;showToast(BOSS_NAME+' опутан паутиной — бей!',2500)}
- if(b.hp<=0){b.mode=5;b.mT=7;b.dying=true}}
-function spawnBubble(){const b=boss;bossWorld(0,17.5,-3,bw);t2.subVectors(b.tgt,bw);const l=t2.length()||1;t2.multiplyScalar(16/l);t2.x+=(Math.random()-.5)*3;t2.y+=1.5+(Math.random()-.5)*2;t2.z+=(Math.random()-.5)*3;
- const id=NET_ID+'-'+(bubSeq++);addBubble(id,bw,t2);sfx.blip();
- if(netOn)net.publish(NP+'b/e',JSON.stringify({k:'b',id,p:[bw.x,bw.y,bw.z].map(x=>Math.round(x*10)/10),v:[t2.x,t2.y,t2.z].map(x=>Math.round(x*10)/10)}))}
+function bossHurt(B,n,label,web){if(!B||!B.alive||B.dying)return;if(B.mode===4)n*=1.5;B.dmgMe+=n;score+=Math.round(n*2);sfx.punch();if(label)showToast(label);
+ if(isBossHost())bossApply(B,n,web);else if(netOn)net.publish(NP+'b/h',JSON.stringify({k:B.key,d:Math.round(n),w:web?1:0}))}
+function bossApply(B,n,web){if(!B.alive||B.dying)return;B.hp=Math.max(0,B.hp-n);
+ if(web&&B.mode!==4&&++B.webs>=4){B.mode=4;B.mT=4;B.webs=0;showToast(B.name+' опутан паутиной — бей!',2500)}
+ if(B.hp<=0){B.mode=5;B.mT=B===KONG?11:7;B.dying=true;B.vy=0}}
+// пузыри Губки Боба и глыбы Конга летят у всех одинаково: ведущий рассылает старт, каждый считает полёт сам
+function spawnBubble(){const b=SB;bossWorld(b,0,17.5,-3,bw);t2.subVectors(b.tgt,bw);const l=t2.length()||1;t2.multiplyScalar(16/l);t2.x+=(Math.random()-.5)*3;t2.y+=1.5+(Math.random()-.5)*2;t2.z+=(Math.random()-.5)*3;
+ const id=NET_ID+'-'+(bubSeq++);addBubble(id,bw,t2);sfx.blip();if(netOn)net.publish(NP+'b/e',JSON.stringify({k:'b',id,p:r10(bw),v:r10(t2)}))}
 function addBubble(id,pos,vel){if(bubbles.some(q=>q.id===id)||bubbles.length>40)return;const m=new THREE.Mesh(bubGeo,bubM);m.position.copy(pos);scene.add(m);bubbles.push({id,m,v:new V3().copy(vel),life:9,ph:Math.random()*6})}
 function popBubble(q,send){const i=bubbles.indexOf(q);if(i<0)return;bubbles.splice(i,1);scene.remove(q.m);puff(sphG,0xe6f8ff,q.m.position,.3,4,.25,.6);sfx.pop();
  if(send&&netOn)net.publish(NP+'b/e',JSON.stringify({k:'p',id:q.id}))}
-function bossMsg(sub,d){if(!d||typeof d!=='object')return;const b=boss;
- if(sub==='s'&&Array.isArray(d.s)&&d.s.length===9&&d.s.every(Number.isFinite)&&typeof d.f==='string'&&/^[a-z0-9]{1,12}$/.test(d.f)&&d.f!==NET_ID){bossOwn=d.f;bossOwnT=performance.now();bossOwnAlive=d.s[8]>.5}
- if(sub==='s'&&Array.isArray(d.s)&&d.s.length===9&&d.s.every(Number.isFinite)&&d.f!==NET_ID&&!isBossHost()){const s=d.s,was=b.alive;
-  b.tx=cl(s[0],-600,600);b.tz=cl(s[1],-600,600);b.th=s[2];b.hp=cl(s[3],0,1e4);b.max=cl(s[4],1,1e4);b.mode=cl(Math.round(s[5]),0,5);b.mT=cl(s[6],-1,10);b.phase=s[7]>1?2:1;b.alive=s[8]>.5;b.dying=b.mode===5;
-  if(b.alive&&!was){b.x=b.tx;b.z=b.tz;b.h=b.th;bossAnnounce()}}
+function throwRock(B){B.g.updateMatrixWorld(true);B.P.rock.getWorldPosition(bw);
+ for(let q=0;q<(B.phase>1?2:1);q++){const tg=B.tgt,dx=tg.x-bw.x,dz=tg.z-bw.z,T=cl(Math.hypot(dx,dz)/48,1.2,4.5),sp=q?(Math.random()-.5)*10:0;
+  t2.set(dx/T+sp,(tg.y-bw.y)/T+10*T,dz/T-sp);const id=NET_ID+'-'+(bubSeq++);addRock(id,bw,t2);if(netOn)net.publish(NP+'b/e',JSON.stringify({k:'r',id,p:r10(bw),v:r10(t2)}))}sfx.toss()}
+function addRock(id,pos,vel){if(rocks.some(q=>q.id===id)||rocks.length>20)return;const m=new THREE.Mesh(rockGeo,rockM);m.position.copy(pos);scene.add(m);rocks.push({id,m,v:new V3().copy(vel),life:9})}
+// глыба Конга взрывается при падении: раскидывает машины и бандитов, герою (или его технике) — урон и отброс
+function rockBoom(q,send){const i=rocks.indexOf(q);if(i<0)return;rocks.splice(i,1);scene.remove(q.m);const at=q.m.position;
+ if(topAt(at.x,at.z,at.y+1)<-1e8&&at.y<1)splash(t2.set(at.x,-.85,at.z),3);else burst(at);puff(sphG,0x8a7f72,at,1,2.2,1.2,.6);
+ for(const f of foes)if(!f.ko&&f.g.position.distanceTo(at)<7)hitFoe(f,3,16,null,at);
+ for(const o of[...propEntities]){const u=o.userData;if(heldProp===o||o.position.distanceTo(at)>7)continue;if(u.kind==='car'){burst(o.position);kill(o)}else{u.thrown=true;tmp2.subVectors(o.position,at).setY(0).normalize();u.velocity.set(tmp2.x*12,8,tmp2.z*12);if(u.kind==='npc')u.down=0}}
+ for(const c of cars){const L=c.L;if(at.y<6&&Math.hypot((L.ax?L.off:c.s)-at.x,(L.ax?c.s:L.off)-at.z)<6)carSmash(c,true)}
+ if(playing()){t2.subVectors(p,at);const d=t2.length()||1,kx=t2.x/d,kz=t2.z/d;if(d<7+hitR()){hitPlayer(18,at);knock(kx*18,9,kz*18)}}
+ if(send&&netOn)net.publish(NP+'b/e',JSON.stringify({k:'q',id:q.id}))}
+function bossMsg(sub,d){if(!d||typeof d!=='object')return;
+ if(sub==='s'&&typeof d.f==='string'&&/^[a-z0-9]{1,12}$/.test(d.f)&&d.f!==NET_ID&&d.s&&typeof d.s==='object'){bossOwn=d.f;bossOwnT=performance.now();bossOwnAlive=d.a>0;
+  if(!isBossHost())for(const B of BOSSES){const s=d.s[B.key];if(!Array.isArray(s)||s.length!==10||!s.every(Number.isFinite))continue;const was=B.alive;
+   B.tx=cl(s[0],-600,600);B.ty=cl(s[1],-50,400);B.tz=cl(s[2],-600,600);B.th=s[3];B.hp=cl(s[4],0,1e4);B.max=cl(s[5],1,1e4);B.mode=cl(Math.round(s[6]),0,5);B.mT=cl(s[7],-1,15);B.phase=s[8]>1?2:1;B.alive=s[9]>.5;B.dying=B.mode===5;
+   if(B.alive&&!was){B.x=B.tx;B.y=B.ty;B.z=B.tz;B.h=B.th;bossAnnounce(B)}}}
  else if(sub==='e'&&typeof d.id==='string'&&/^[a-z0-9-]{1,24}$/.test(d.id)){
-  if(d.k==='b'&&b.alive&&Array.isArray(d.p)&&Array.isArray(d.v)&&d.p.length===3&&d.v.length===3&&[...d.p,...d.v].every(Number.isFinite))
-   addBubble(d.id,t2.set(cl(d.p[0],-600,600),cl(d.p[1],-5,60),cl(d.p[2],-600,600)),tmp2.set(cl(d.v[0],-40,40),cl(d.v[1],-40,40),cl(d.v[2],-40,40)));
-  else if(d.k==='p'){const q=bubbles.find(q=>q.id===d.id);if(q)popBubble(q,false)}}
- else if(sub==='h'&&isBossHost()){if(d.call){if(!b.alive&&Number.isFinite(d.x)&&Number.isFinite(d.z))bossSpawn(cl(d.x,-600,600),cl(d.z,-600,600));return}if(Number.isFinite(d.d))bossApply(cl(d.d,0,40),!!d.w)}}
-// поведение (только у ведущего): идёт к ближайшему игроку по воде; вблизи бьёт рукой, на средней дистанции топает, издалека пускает пузыри
-function bossAI(dt,now){const b=boss;b.mT-=dt;
- if(b.mode===5){if(b.mT<=0){b.alive=false;b.dying=false;b.next=now+240}return}
- let best=p,bd=Math.hypot(p.x-b.x,p.z-b.z);for(const o of peersMP.values())if(o.model){const q=o.model.position,d=Math.hypot(q.x-b.x,q.z-b.z);if(d<bd){bd=d;best=q}}b.tgt.copy(best);
- let d=Math.atan2(-(best.x-b.x),-(best.z-b.z))-b.h;d=Math.atan2(Math.sin(d),Math.cos(d));b.h+=d*Math.min(1,(b.mode===0?1.2:.5)*dt);
- if(b.hp<=b.max*.5&&b.phase===1){b.phase=2;showToast(BOSS_NAME+' в ярости!',2500)}
- if(b.mode===4){if(b.mT<=0){b.mode=0;b.mT=1.5}return}
- if(b.mode===2){b.bubT-=dt;if(b.bubN>0&&b.bubT<=0){b.bubN--;b.bubT=.32;spawnBubble()}}
- if(b.mode===0){if(bd>18){const sp=b.phase>1?6.5:4.5,sx=-Math.sin(b.h)*sp*dt,sz=-Math.cos(b.h)*sp*dt;if(waterOK(b.x+sx,b.z+sz)){b.x+=sx;b.z+=sz}else if(waterOK(b.x+sx,b.z))b.x+=sx;else if(waterOK(b.x,b.z+sz))b.z+=sz}
-  if(b.mT<=0){if(bd<22&&best.y<32){b.mode=3;b.mT=1.2}else if(bd<55&&best.y<16){b.mode=1;b.mT=1.6}else if(bd<150){b.mode=2;b.mT=2.8;b.bubN=b.phase>1?8:5;b.bubT=.2}else b.mT=1.5}}
- else if(b.mT<=0){b.mode=0;b.mT=b.phase>1?1.3:2.3}}
-function bossAnim(dt,now){const b=boss,K=Math.min(1,8*dt),sm=(o,a)=>{o.rotation.x+=(a-o.rotation.x)*K};let lL=0,lR=0,aL=0,aR=0,lean=0,rz=0;
- if(b.mode===0){b.stepT+=dt*(b.phase>1?2.4:1.9);const s=Math.sin(b.stepT);lL=s*.4;lR=-s*.4;aL=-s*.3;aR=s*.3;
+  if(d.k==='b'&&SB.alive&&v3ok(d.p)&&v3ok(d.v))addBubble(d.id,t2.set(cl(d.p[0],-600,600),cl(d.p[1],-5,60),cl(d.p[2],-600,600)),tmp2.set(cl(d.v[0],-40,40),cl(d.v[1],-40,40),cl(d.v[2],-40,40)));
+  else if(d.k==='r'&&KONG.alive&&v3ok(d.p)&&v3ok(d.v))addRock(d.id,t2.set(cl(d.p[0],-600,600),cl(d.p[1],-5,400),cl(d.p[2],-600,600)),tmp2.set(cl(d.v[0],-120,120),cl(d.v[1],-120,120),cl(d.v[2],-120,120)));
+  else if(d.k==='p'){const q=bubbles.find(q=>q.id===d.id);if(q)popBubble(q,false)}
+  else if(d.k==='q'){const q=rocks.find(q=>q.id===d.id);if(q)rockBoom(q,false)}}
+ else if(sub==='h'&&isBossHost()){if(d.call){if((d.call==='d'||d.call==='k')&&Number.isFinite(d.x)&&Number.isFinite(d.z))bossSpawnW(d.call,cl(d.x,-600,600),cl(d.z,-600,600));return}
+  const B=BOSSES.find(B=>B.key===d.k);if(B&&Number.isFinite(d.d))bossApply(B,cl(d.d,0,80),!!d.w)}}
+// поведение (только у ведущего): цель — ближайший игрок; гигантам в заливе — по горизонтали, Конгу — по прямой от груди
+function turnTo(B,x,z,rate,dt){let d=Math.atan2(-(x-B.x),-(z-B.z))-B.h;d=Math.atan2(Math.sin(d),Math.cos(d));B.h+=d*Math.min(1,rate*dt)}
+function wade(B,sp,dt,F){const sx=-Math.sin(B.h)*sp*dt,sz=-Math.cos(B.h)*sp*dt;if(waterOK(B.x+sx,B.z+sz,F)){B.x+=sx;B.z+=sz;return true}if(waterOK(B.x+sx,B.z,F)){B.x+=sx;return true}if(waterOK(B.x,B.z+sz,F)){B.z+=sz;return true}return false}
+function bossAI(B,dt,now){B.mT-=dt;
+ if(B.mode===5){if(B.fall)B.fall(B,dt);if(B.mT<=0){B.alive=false;B.dying=false;B.next=now+(B===KONG?300:240)}return}
+ const ds=q=>B===KONG?q.distanceTo(B.c):Math.hypot(q.x-B.x,q.z-B.z);let best=p,bd=ds(p);
+ for(const o of peersMP.values())if(o.model){const q=o.model.position,d=ds(q);if(d<bd){bd=d;best=q}}B.tgt.copy(best);
+ if(B.hp<=B.max*.5&&B.phase===1){B.phase=2;showToast(B.name+' в ярости!',2500)}
+ if(B.mode===4){if(B===PAT)B.y+=(-1.2-B.y)*Math.min(1,6*dt);if(B.mT<=0){B.mode=0;B.mT=1.5}return}
+ B.ai(B,dt,now,best,bd)}
+// Губка Боб: вблизи бьёт рукой, на средней дистанции топает, издалека пускает пузыри
+SB.ai=(B,dt,now,best,bd)=>{turnTo(B,best.x,best.z,B.mode===0?1.2:.5,dt);
+ if(B.mode===2){B.bubT-=dt;if(B.bubN>0&&B.bubT<=0){B.bubN--;B.bubT=.32;spawnBubble()}}
+ if(B.mode===0){if(bd>18)wade(B,B.phase>1?6.5:4.5,dt,SBF);
+  if(B.mT<=0){if(bd<22&&best.y<32){B.mode=3;B.mT=1.2}else if(bd<55&&best.y<16){B.mode=1;B.mT=1.6}else if(bd<150){B.mode=2;B.mT=2.8;B.bubN=B.phase>1?8:5;B.bubT=.2}else B.mT=1.5}}
+ else if(B.mT<=0){B.mode=0;B.mT=B.phase>1?1.3:2.3}};
+// Патрик: без цели рядом держится справа от Губки Боба; вблизи — оплеуха, ближе 75 м — таран с разбега, дальше — прыжок пузом с волной;
+// если цель рядом с обоими — комбо: Губка Боб топает, а Патрик в тот же миг плюхается пузом
+PAT.ai=(B,dt,now,best,bd)=>{const far=bd>140||best.y>40,base=-1.2;
+ if(B.mode===0){let gx=best.x,gz=best.z;if(far&&SB.alive&&!SB.dying){gx=SB.x+Math.cos(SB.h)*24;gz=SB.z-Math.sin(SB.h)*24}
+  turnTo(B,gx,gz,1.6,dt);if(Math.hypot(gx-B.x,gz-B.z)>(far?5:14))wade(B,B.phase>1?8:6,dt,PATF);B.y+=(base-B.y)*Math.min(1,6*dt);
+  if(B.mT<=0){if(far)B.mT=1;
+   else if(SB.alive&&!SB.dying&&SB.mode===0&&now>comboT&&best.y<16&&Math.hypot(SB.x-B.x,SB.z-B.z)<50&&Math.hypot(best.x-SB.x,best.z-SB.z)<60){comboT=now+25;B.mode=2;B.mT=1.8;SB.mode=1;SB.mT=1.6}
+   else if(bd<16&&best.y<30){B.mode=3;B.mT=1}
+   else if(bd<75&&best.y<20){B.mode=1;B.mT=2.4}
+   else{B.mode=2;B.mT=1.8}}}
+ else if(B.mode===1){if(2.4-B.mT<.5)turnTo(B,best.x,best.z,5,dt);else if(!wade(B,B.phase>1?22:18,dt,PATF))B.mT=Math.min(B.mT,.2)}
+ else if(B.mode===2){const t=1.8-B.mT;B.y=base+(t<1.2?Math.sin(Math.PI*t/1.2)*14:0);if(t<1.2&&bd>8){turnTo(B,best.x,best.z,2,dt);wade(B,9,dt,PATF)}}
+ else{turnTo(B,best.x,best.z,3,dt);B.y+=(base-B.y)*Math.min(1,6*dt)}
+ if(B.mode!==0&&B.mT<=0){B.mode=0;B.mT=B.phase>1?1.1:1.9;B.y=base}};
+// Конг: вблизи отмахивается, ближе 95 м бьёт себя в грудь (волна во все стороны), дальше бросает глыбы; без целей просто ревёт и колотит грудь
+KONG.ai=(B,dt,now,best,bd)=>{turnTo(B,best.x,best.z,B.mode===0?.9:B.mode===3?2:.35,dt);kongPlace(B);
+ if(B.mode===0){if(B.mT<=0){if(bd<34){B.mode=3;B.mT=1}else if(bd<95||bd>=440){B.mode=1;B.mT=2.2}else{B.mode=2;B.mT=1.8}}}
+ else{if(B.mode===2&&!B.thrown&&1.8-B.mT>=1.25){B.thrown=true;throwRock(B)}if(B.mT<=0){B.mode=0;B.mT=B.phase>1?1:2}}};
+// повержен — шагает с крыши наружу и падает вниз
+KONG.fall=(B,dt)=>{const gy=Math.max(-1.2,topAt(B.x,B.z,B.y+2));if(B.y<=gy+.05&&gy<KT.y-1){B.vy=0;return}B.vy-=15*dt;B.x-=Math.sin(B.h)*7*dt;B.z-=Math.cos(B.h)*7*dt;B.y=Math.max(gy,B.y+B.vy*dt)};
+SB.anim=(B,dt,now)=>{const P=B.P,K=Math.min(1,8*dt),sm=(o,a)=>{o.rotation.x+=(a-o.rotation.x)*K};let lL=0,lR=0,aL=0,aR=0,lean=0,rz=0;
+ if(B.mode===0){B.stepT+=dt*(B.phase>1?2.4:1.9);const s=Math.sin(B.stepT);lL=s*.4;lR=-s*.4;aL=-s*.3;aR=s*.3;
   // шаг по воде — брызги у ступни
-  if(Math.sign(s)!==b.stepS){b.stepS=Math.sign(s);bossWorld(s>0?2.8:-2.8,0,-1,bw);puff(ringG,0xdff6ff,t2.set(bw.x,-.8,bw.z),2,1.8,.7,.6)}}
- else if(b.mode===1){const t=1.6-b.mT;lR=t<.55?1.1*t/.55:t<.75?1.1-(t-.55)/.2*1.1:0;aL=aR=.3}
- else if(b.mode===2){lean=.15;aL=aR=.8}
- else if(b.mode===3){const t=1.2-b.mT;aR=t<.55?2.8*t/.55:t<.8?2.8-(t-.55)/.25*2.2:.6*(1-Math.min(1,(t-.8)/.4))}
- else if(b.mode===4)rz=Math.sin(now*6)*.08;
- if(b.mode===5){BP.body.rotation.x+=(1.45-BP.body.rotation.x)*Math.min(1,1.2*dt);if(BP.body.rotation.x>1.3)b.sink=Math.min(14,b.sink+dt*3)}
- else{sm(BP.body,lean);BP.body.rotation.z+=(rz-BP.body.rotation.z)*K}
- sm(BP.legs[0],lL);sm(BP.legs[1],lR);sm(BP.arms[0],aL);sm(BP.arms[1],aR)}
-// попадания босса по своему герою: волна топота бьёт тех, кто ниже 5 м над поверхностью; рука — тех, кто рядом с ладонью
-function bossHits(){const b=boss;
- if(b.mode===1){const t=1.6-b.mT;
-  if(t>=.75&&!b.slam){b.slam=true;bossWorld(2.8,0,-1.5,bw);b.sx=bw.x;b.sz=bw.z;stompRing.position.set(bw.x,-.7,bw.z);const g=near(bw);sfx.boom(g);shake=Math.max(shake,.6*g+.1);puff(sphG,0xdff6ff,t2.set(bw.x,0,bw.z),1.2,2.5,.6,.7)}
-  if(b.slam){const R0=(t-.75)*36;stompRing.scale.setScalar(Math.max(.01,R0));stompRing.material.opacity=Math.max(0,.8*(1-R0/50));
-   if(!b.hitDone&&R0<50){const d=Math.hypot(p.x-b.sx,p.z-b.sz),gy=topAt(p.x,p.z,p.y),hgt=p.y-PR-(gy<-1e8?-.9:gy);if(Math.abs(d-R0)<3&&hgt<5){b.hitDone=true;hitPlayer(15,t2.set(b.sx,0,b.sz));v.y=Math.max(v.y,9)}}}}
- else stompRing.material.opacity=0;
- if(b.mode===3){const t=1.2-b.mT;if(t>.55&&t<.85&&!b.hitDone){BP.arms[1].localToWorld(bw.set(.6,-8.6,0));if(bw.distanceTo(p)<6.5){b.hitDone=true;hitPlayer(20,bw);t2.subVectors(p,bw).normalize();v.addScaledVector(t2,26);v.y+=8;showToast('Губка Боб достал рукой!')}}}}
-// столкновение героя с телом босса: отталкивает, на голову можно встать
-function bossCollide(){onBoss=false;if(!bossG.visible||boss.dying)return;bossLoc(p.x,p.y,p.z,bl);
- const cx=cl(bl.x,-6,6),cy=cl(bl.y,9,26),cz=cl(bl.z,-2.6,2.6),dx=bl.x-cx,dy=bl.y-cy,dz=bl.z-cz,d=Math.hypot(dx,dy,dz);if(d>=PR)return;
- if(d<1e-6){p.y=26-1.2+PR;if(v.y<0)v.y=0;onG=onBoss=true;return}
- const nx=dx/d,ny=dy/d,nz=dz/d,c=Math.cos(boss.h),s=Math.sin(boss.h),wx=nx*c+nz*s,wz=-nx*s+nz*c,pen=PR-d;
+  if(Math.sign(s)!==B.stepS){B.stepS=Math.sign(s);bossWorld(B,s>0?2.8:-2.8,0,-1,bw);puff(ringG,0xdff6ff,t2.set(bw.x,-.8,bw.z),2,1.8,.7,.6)}}
+ else if(B.mode===1){const t=1.6-B.mT;lR=t<.55?1.1*t/.55:t<.75?1.1-(t-.55)/.2*1.1:0;aL=aR=.3}
+ else if(B.mode===2){lean=.15;aL=aR=.8}
+ else if(B.mode===3){const t=1.2-B.mT;aR=t<.55?2.8*t/.55:t<.8?2.8-(t-.55)/.25*2.2:.6*(1-Math.min(1,(t-.8)/.4))}
+ else if(B.mode===4)rz=Math.sin(now*6)*.08;
+ if(B.mode===5){P.body.rotation.x+=(1.45-P.body.rotation.x)*Math.min(1,1.2*dt);if(P.body.rotation.x>1.3)B.sink=Math.min(14,B.sink+dt*3)}
+ else{sm(P.body,lean);P.body.rotation.z+=(rz-P.body.rotation.z)*K}
+ sm(P.legs[0],lL);sm(P.legs[1],lR);sm(P.arms[0],aL);sm(P.arms[1],aR)};
+PAT.anim=(B,dt,now)=>{const P=B.P,K=Math.min(1,8*dt),sx=(o,a)=>{o.rotation.x+=(a-o.rotation.x)*K},sy=(o,a)=>{o.rotation.y+=(a-o.rotation.y)*K};let lL=0,lR=0,yL=0,yR=0,lean=0,rz=0;
+ const run=B.mode===1&&2.4-B.mT>.5;
+ if(B.mode===0||run){B.stepT+=dt*(run?6:2.8);const s=Math.sin(B.stepT);lL=s*(run?.8:.45);lR=-lL;yL=yR=s*.35;if(run){lean=-.35;yL=.9;yR=-.9}
+  if(B.y<0&&Math.sign(s)!==B.stepS){B.stepS=Math.sign(s);bossWorld(B,s>0?2.6:-2.6,0,-1,bw);puff(ringG,0xdff6ff,t2.set(bw.x,-.8,bw.z),1.6,1.8,.7,.6)}}
+ else if(B.mode===1){lean=.12;yL=.5;yR=-.5}
+ else if(B.mode===2){const t=1.8-B.mT;if(t<1.2){lL=lR=-.6;lean=-Math.min(.9,t*.9);yL=-.6;yR=.6}}
+ else if(B.mode===3){const t=1-B.mT;yR=t<.38?-.7:t<.62?-.7+2.1*(t-.38)/.24:1.4;lean=-.1}
+ else if(B.mode===4)rz=Math.sin(now*6)*.08;
+ if(B.mode===5){P.body.rotation.x+=(1.45-P.body.rotation.x)*Math.min(1,1.2*dt);if(P.body.rotation.x>1.3)B.sink=Math.min(14,B.sink+dt*3)}
+ else{sx(P.body,lean);P.body.rotation.z+=(rz-P.body.rotation.z)*K}
+ sx(P.legs[0],lL);sx(P.legs[1],lR);sy(P.arms[0],yL);sy(P.arms[1],yR)};
+// руки Конга: плечо +x — вперёд, z — внутрь; бросок идёт через верх, поэтому угол уходит за −π и потом снимается полный оборот
+KONG.anim=(B,dt,now)=>{const P=B.P,K=Math.min(1,8*dt),sm=(o,ax,a)=>{o.rotation[ax]+=(a-o.rotation[ax])*K};
+ let aL=.3,aR=.3,zL=.12,zR=-.12,eL=.1,eR=.1,lean=-.25,jaw=0;
+ if(B.mode===0){const s=Math.sin(now*1.7);lean=-.25+s*.03;aL=.3+s*.06;aR=.3-s*.06}
+ else if(B.mode===1){const t=2.2-B.mT,s=Math.sin(t*15);lean=-.02;aL=1.2+(s>0?.4:0);aR=1.2+(s<0?.4:0);zL=.65;zR=-.65;eL=eR=1;jaw=t>.9?1:0}
+ else if(B.mode===2){const t=1.8-B.mT;aR=t<.8?.3-2.9*t/.8:t<1.35?-2.6-2.4*(t-.8)/.55:-5;eR=.1;zR=-.05;lean=t<.8?-.1:-.4;jaw=t>1.1&&t<1.5?.8:0}
+ else if(B.mode===3){const t=1-B.mT;aR=1.45;zR=t<.3?1.1:t<.62?1.1-2.3*(t-.3)/.32:-1.2;eR=.15;lean=-.45;jaw=.6}
+ else if(B.mode===4){lean=-.25+Math.sin(now*6)*.1;aL=aR=.15}
+ P.rock.visible=B.mode===2&&1.8-B.mT<1.25;
+ if(B.mode!==2&&P.arms[1].rotation.x<-Math.PI)P.arms[1].rotation.x+=2*Math.PI;
+ if(B.mode===5)P.body.rotation.x+=(1.5-P.body.rotation.x)*Math.min(1,1.2*dt);else sm(P.body,'x',0);
+ sm(P.tor,'x',lean);sm(P.arms[0],'x',aL);sm(P.arms[1],'x',aR);sm(P.arms[0],'z',zL);sm(P.arms[1],'z',zR);sm(P.els[0],'x',eL);sm(P.els[1],'x',eR);
+ P.head.rotation.y=B.mode===0?Math.sin(now*.5)*.3:0;P.jaw.position.y+=(-1.35-jaw*.55-P.jaw.position.y)*K};
+// ударная волна по воде от точки (cx,cz): растёт со скоростью rate до maxR, бьёт тех, кто ниже 5 м над поверхностью
+function wave(B,t,t0,cx,cz,rate,maxR,dmg){
+ if(t>=t0&&!B.slam){B.slam=true;B.sx=cx;B.sz=cz;B.ring.position.set(cx,-.7,cz);const g=near(t2.set(cx,0,cz));sfx.boom(g);shake=Math.max(shake,.6*g+.1);puff(sphG,0xdff6ff,t2,1.2,2.5,.6,.7)}
+ if(!B.slam)return;const R0=(t-t0)*rate;B.ring.scale.setScalar(Math.max(.01,R0));B.ring.material.opacity=Math.max(0,.8*(1-R0/maxR));
+ if(!B.hitDone&&R0<maxR){const d=Math.hypot(p.x-B.sx,p.z-B.sz),gy=topAt(p.x,p.z,p.y),hgt=p.y-PR-(gy<-1e8?-.9:gy);
+  if(Math.abs(d-R0)<3+hitR()&&hgt<5){B.hitDone=true;hitPlayer(dmg,t2.set(B.sx,0,B.sz));if(ride.k)knock(0,12,0);else v.y=Math.max(v.y,9)}}}
+// попадания боссов по своему герою (или его технике)
+SB.hits=B=>{if(B.mode===1){bossWorld(B,2.8,0,-1.5,bw);wave(B,1.6-B.mT,.75,bw.x,bw.z,36,50,15)}
+ if(B.mode===3){const t=1.2-B.mT;if(t>.55&&t<.85&&!B.hitDone){B.P.arms[1].localToWorld(bw.set(.6,-8.6,0));if(bw.distanceTo(p)<6.5+hitR()){B.hitDone=true;hitPlayer(20,bw);t2.subVectors(p,bw).normalize();knock(t2.x*26,t2.y*26+8,t2.z*26);showToast('Губка Боб достал рукой!')}}}};
+PAT.hits=B=>{
+ if(B.mode===1&&2.4-B.mT>.5&&!B.hitDone&&Math.hypot(p.x-B.x,p.z-B.z)<11+hitR()&&p.y<24){B.hitDone=true;hitPlayer(18,t2.set(B.x,0,B.z));knock(-Math.sin(B.h)*30,10,-Math.cos(B.h)*30);showToast('Патрик протаранил!')}
+ if(B.mode===2)wave(B,1.8-B.mT,1.2,B.x,B.z,40,60,15);
+ if(B.mode===3){const t=1-B.mT;if(t>.38&&t<.62&&!B.hitDone){B.P.arms[1].localToWorld(bw.set(6.9,-4,0));if(Math.hypot(bw.x-p.x,bw.z-p.z)<8+hitR()&&p.y<bw.y+4){B.hitDone=true;hitPlayer(16,bw);t2.subVectors(p,bw).normalize();knock(t2.x*24,8,t2.z*24);showToast('Патрик дал оплеуху!')}}}};
+// волна от груди Конга — шар во все стороны: сбивает героев в воздухе и вертолёты
+KONG.hits=B=>{
+ if(B.mode===1){const t=2.2-B.mT;if(t>=1.1&&!B.slam){B.slam=true;sfx.roar();kwave.position.copy(B.c);shake=Math.max(shake,.5*near(B.c)+.1)}
+  if(B.slam){const R0=(t-1.1)*55;kwave.visible=R0<90;kwave.scale.setScalar(Math.max(.01,R0));kwave.material.opacity=Math.max(0,.3*(1-R0/90));
+   if(!B.hitDone&&R0<90){t2.subVectors(p,B.c);const d=t2.length()||1,kx=t2.x/d,kz=t2.z/d;if(Math.abs(d-R0)<4+hitR()){B.hitDone=true;hitPlayer(15,B.c);knock(kx*28,8,kz*28);showToast('Кинг-Конг сбил волной!')}}
+   const now=performance.now()/1000;for(const h of helis)if(!h.fall&&!(h.down>now)&&Math.abs(h.g.position.distanceTo(B.c)-R0)<6)heliFall(h)}}
+ if(B.mode===3){const t=1-B.mT;if(t>.3&&t<.62&&!B.hitDone){B.P.els[1].localToWorld(bw.set(0,-5.8,0));if(bw.distanceTo(p)<8+hitR()){B.hitDone=true;hitPlayer(22,bw);t2.subVectors(p,B.c).setY(0).normalize();knock(t2.x*36,10,t2.z*36);showToast('Кинг-Конг отшвырнул!')}}}};
+function heliFall(h){t2.subVectors(h.g.position,KONG.c).setY(0).normalize();h.fall=new V3(t2.x*16,6,t2.z*16);sfx.boom(near(h.g.position)*.6);puff(sphG,0xffa33c,h.g.position,.3,3,.4,.8);if(h.g.position.distanceTo(p)<450)showToast('Кинг-Конг сбил вертолёт!')}
+// столкновение героя с телами боссов: отталкивает, на голову можно встать
+function bossCollide(){onBoss=null;for(const B of BOSSES){if(!B.alive||B.dying)continue;const b=B.box;bossLoc(B,p.x,p.y,p.z,bl);
+ const cx=cl(bl.x,-b[0],b[0]),cy=cl(bl.y,b[1],b[2]),cz=cl(bl.z,-b[3],b[3]),dx=bl.x-cx,dy=bl.y-cy,dz=bl.z-cz,d=Math.hypot(dx,dy,dz);if(d>=PR)continue;
+ if(d<1e-6){p.y=b[2]+B.y+PR;if(v.y<0)v.y=0;onG=true;onBoss=B;continue}
+ const nx=dx/d,ny=dy/d,nz=dz/d,c=Math.cos(B.h),s=Math.sin(B.h),wx=nx*c+nz*s,wz=-nx*s+nz*c,pen=PR-d;
  p.x+=wx*pen;p.y+=ny*pen;p.z+=wz*pen;const vn=v.x*wx+v.y*ny+v.z*wz;if(vn<0){v.x-=1.2*vn*wx;v.y-=1.2*vn*ny;v.z-=1.2*vn*wz}
- if(ny>.7)onG=onBoss=true}
-function bossStep(dt,now,on){const host=isBossHost(),b=boss;
- if(host){if(!b.alive&&now>b.next)bossSpawn(p.x,p.z);if(b.alive)bossAI(dt,now)}
- else if(b.alive){b.x+=(b.tx-b.x)*Math.min(1,5*dt);b.z+=(b.tz-b.z)*Math.min(1,5*dt);let d=b.th-b.h;d=Math.atan2(Math.sin(d),Math.cos(d));b.h+=d*Math.min(1,5*dt);b.mT-=dt}
- if(host&&netOn&&now-b.sendT>(b.alive?.16:2)){b.sendT=now;
-  net.publish(NP+'b/s',JSON.stringify({f:NET_ID,s:[Math.round(b.x*10)/10,Math.round(b.z*10)/10,Math.round(b.h*100)/100,Math.round(b.hp),b.max,b.mode,Math.round(b.mT*100)/100,b.phase,b.alive?1:0]}))}
- if(b.mode!==b.lm){b.lm=b.mode;b.slam=false;b.hitDone=false}
- bossG.visible=b.alive;bossBeam.visible=b.alive&&!b.dying;$('boss').style.display=b.alive?'block':'none';
- if(!b.alive){stompRing.material.opacity=0;for(const q of[...bubbles])popBubble(q,false);return}
- bossG.position.set(b.x,-1.2-b.sink,b.z);bossG.rotation.y=b.h;bossAnim(dt,now);bossG.updateMatrixWorld(true);
- bossBeam.position.set(b.x,30,b.z);bossBeam.material.opacity=.18+Math.sin(now*5)*.08;
- bossHpEl.style.width=(100*b.hp/b.max)+'%';put(bossSt,(b.phase>1&&b.mode!==5?'в ярости · ':'')+BM[b.mode]);
- // точка для веб-удара: ближайшее к герою место на теле (strike сам добавляет 1 м по высоте)
- bossLoc(p.x,p.y,p.z,bl);bossWorld(cl(bl.x,-6,6),cl(bl.y,9,26),cl(bl.z,-2.6,2.6),bossAimV).y-=1;
- if(on&&!b.dying)bossHits();
- for(let i=bubbles.length-1;i>=0;i--){const q=bubbles[i];q.life-=dt;q.v.y+=Math.sin(now*3+q.ph)*.6*dt;q.m.position.addScaledVector(q.v,dt);q.m.scale.setScalar(1+Math.sin(now*6+q.ph)*.06);
-  if(on&&q.m.position.distanceTo(p)<2.4){hitPlayer(10,q.m.position);popBubble(q,true);continue}
-  if(q.life<=0||inBox(q.m.position)||q.m.position.y<-.5)popBubble(q,false)}
- if(b.mode===5&&!b.rewarded){b.rewarded=true;sfx.win();for(let n=0;n<10;n++)puff(sphG,0xe6f8ff,t2.set(b.x+(Math.random()-.5)*14,8+Math.random()*16,b.z+(Math.random()-.5)*8),.6,2.5,.8,.6);
-  if(b.dmgMe>0){score+=5000;showToast(BOSS_NAME+' повержен! +5000',3500);save()}else showToast(BOSS_NAME+' повержен!',3000)}}
+ if(ny>.7){onG=true;onBoss=B}}}
+function bubblesStep(dt,now,on){for(let i=bubbles.length-1;i>=0;i--){const q=bubbles[i];if(!q)continue;q.life-=dt;q.v.y+=Math.sin(now*3+q.ph)*.6*dt;q.m.position.addScaledVector(q.v,dt);q.m.scale.setScalar(1+Math.sin(now*6+q.ph)*.06);
+  if(on&&q.m.position.distanceTo(p)<2.4+hitR()){hitPlayer(10,q.m.position);popBubble(q,true);continue}
+  if(q.life<=0||inBox(q.m.position)||q.m.position.y<-.5)popBubble(q,false)}}
+function rocksStep(dt,on){for(let i=rocks.length-1;i>=0;i--){const q=rocks[i];if(!q)continue;const P=q.m.position;q.life-=dt;q.v.y-=20*dt;P.addScaledVector(q.v,dt);q.m.rotation.x+=3*dt;q.m.rotation.z+=2*dt;
+  if(on&&P.distanceTo(p)<2.6+hitR()){rockBoom(q,true);continue}
+  const gy=topAt(P.x,P.z,P.y+1);if(q.life<=0||inBox(P)||(gy<-1e8?P.y<-.5:P.y<gy+1))rockBoom(q,false)}}
+function bossStep(dt,now,on){const host=isBossHost();
+ if(host){if(!SB.alive&&!PAT.alive&&now>SB.next&&now>PAT.next)spawnDuo(p.x,p.z);if(!KONG.alive&&now>KONG.next)spawnKong();for(const B of BOSSES)if(B.alive)bossAI(B,dt,now)}
+ else for(const B of BOSSES)if(B.alive){const f=Math.min(1,5*dt);B.x+=(B.tx-B.x)*f;B.y+=(B.ty-B.y)*f;B.z+=(B.tz-B.z)*f;let d=B.th-B.h;d=Math.atan2(Math.sin(d),Math.cos(d));B.h+=d*f;B.mT-=dt;if(B===KONG&&!B.dying)kongPlace(B)}
+ if(host&&netOn&&now-bossSendT>(bossAny()?.16:2)){bossSendT=now;const s={},q=x=>Math.round(x*10)/10;
+  for(const B of BOSSES)s[B.key]=[q(B.x),q(B.y),q(B.z),Math.round(B.h*100)/100,Math.round(B.hp),B.max,B.mode,Math.round(B.mT*100)/100,B.phase,B.alive?1:0];
+  net.publish(NP+'b/s',JSON.stringify({f:NET_ID,a:BOSSES.filter(B=>B.alive).length,s}))}
+ let any=false;
+ for(const B of BOSSES){if(B.mode!==B.lm){B.lm=B.mode;B.slam=false;B.hitDone=false;B.thrown=false}
+  B.g.visible=B.alive;B.beam.visible=B.alive&&!B.dying;B.el.style.display=B.alive?'':'none';if(!B.slam)B.ring.material.opacity=0;if(!B.alive)continue;any=true;
+  B.g.position.set(B.x,B.y-B.sink,B.z);B.g.rotation.y=B.h;B.anim(B,dt,now);B.g.updateMatrixWorld(true);bossWorld(B,0,(B.box[1]+B.box[2])/2,0,B.c);
+  B.beam.position.set(B.x,B.y+B.box[2]+3,B.z);B.beam.material.opacity=.18+Math.sin(now*5)*.08;
+  B.hpEl.style.width=(100*B.hp/B.max)+'%';put(B.stEl,(B.phase>1&&B.mode!==5?'в ярости · ':'')+B.BM[B.mode]);
+  // точка для веб-удара: ближайшее к герою место на теле (strike сам добавляет 1 м по высоте)
+  bossLoc(B,p.x,p.y,p.z,bl);const b=B.box;bossWorld(B,cl(bl.x,-b[0],b[0]),cl(bl.y,b[1],b[2]),cl(bl.z,-b[3],b[3]),B.aim).y-=1;
+  if(on&&!B.dying)B.hits(B);
+  if(B.mode===5&&!B.rewarded){B.rewarded=true;sfx.win();for(let n=0;n<10;n++)puff(sphG,0xe6f8ff,t2.set(B.x+(Math.random()-.5)*14,B.y+8+Math.random()*16,B.z+(Math.random()-.5)*8),.6,2.5,.8,.6);
+   if(B.dmgMe>0){score+=B.reward;showToast(B.name+' повержен! +'+B.reward,3500);save()}else showToast(B.name+' повержен!',3000)}}
+ // комбо дуэта видят все: Губка Боб топает, а Патрик в этот же миг плюхается пузом
+ const cm=SB.alive&&PAT.alive&&SB.mode===1&&PAT.mode===2;if(cm&&!comboOn)showToast('Комбо: Губка Боб и Патрик бьют вместе!',2200);comboOn=cm;
+ if(!KONG.alive||KONG.mode!==1||!KONG.slam)kwave.visible=false;
+ $('boss').style.display=any?'block':'none';
+ if(!SB.alive)for(const q of[...bubbles])popBubble(q,false);
+ bubblesStep(dt,now,on);rocksStep(dt,on)}
 
 // --- дрон: X — запустить/вернуть; камера переходит к дрону, герой стоит на месте. WASD — полёт по камере, Пробел/C — вверх/вниз,
 // Shift — форсаж, ЛКМ/J (держать) — огонь, ПКМ/E — таран. Удар на скорости или таран — взрыв: бандиты в радиусе выбывают,
@@ -1088,11 +1257,11 @@ function droneRam(){if(!drone.on||drone.ram)return;drone.ram=true;sfx.zip();show
 // взрыв дрона: всё в радиусе получает урон и отлетает; остальным игрокам уходит только картинка взрыва
 function droneBoom(at,big){const R0=big?9:7;burst(at);
  for(const f of foes){if(f.ko)continue;const q=f.g.position;if(Math.hypot(q.x-at.x,q.y+1-at.y,q.z-at.z)<R0)hitFoe(f,3,18,null,at)}
- if(boss.alive&&!boss.dying){bossLoc(at.x,at.y,at.z,bl);if(Math.hypot(bl.x-cl(bl.x,-6,6),bl.y-cl(bl.y,9,26),bl.z-cl(bl.z,-2.6,2.6))<R0)bossHurt(big?45:30,'Таран дроном по боссу!')}
+ for(const B of BOSSES)if(B.alive&&!B.dying&&bossDist(B,at)<R0)bossHurt(B,big?45:30,'Таран дроном по боссу!');
  for(const o of[...propEntities]){const u=o.userData;if(heldProp===o||o.position.distanceTo(at)>R0)continue;
   if(u.kind==='car'){burst(o.position);kill(o)}else{u.thrown=true;tmp2.subVectors(o.position,at).setY(0).normalize();u.velocity.set(tmp2.x*14,9,tmp2.z*14);if(u.kind==='npc')u.down=0}}
- for(const q of[...bubbles])if(q.m.position.distanceTo(at)<R0)popBubble(q,true);
- if(netOn)net.publish(NP+'x',JSON.stringify({id:NET_ID,p:[at.x,at.y,at.z].map(x=>Math.round(x*10)/10)}))}
+ for(const q of[...bubbles])if(q.m.position.distanceTo(at)<R0)popBubble(q,true);for(const q of[...rocks])if(q.m.position.distanceTo(at)<R0)rockBoom(q,true);
+ if(netOn)net.publish(NP+'x',JSON.stringify({id:NET_ID,p:r10(at),r:R0}))}
 function droneCrash(){droneBoom(drone.pos.clone(),drone.ram);droneEnd(drone.ram?'Таран!':'Дрон разбился')}
 function droneShoot(){camera.getWorldDirection(dir);const t=Math.min(firstHit(camera.position,dir,300),300),aim=tmp2.copy(camera.position).addScaledVector(dir,t);
  drone.gun=-drone.gun;droneG.updateMatrixWorld(true);const o=droneG.localToWorld(new V3(drone.gun*.12,-.1,-.52)),d=aim.sub(o).normalize();
@@ -1118,19 +1287,296 @@ function droneStep(dt){const now=performance.now()/1000,d=drone;d.bat-=dt;if(d.b
 // пули дрона (vis — чужие, только картинка)
 function dShotsStep(dt){for(let i=dShots.length-1;i>=0;i--){const s=dShots[i],m=s.m;m.position.addScaledVector(s.d,160*dt);s.life-=dt;let done=s.life<=0;
   if(!done&&!s.vis){for(const f of foes){if(f.ko)continue;const q=f.g.position;if(Math.hypot(m.position.x-q.x,m.position.y-q.y-1,m.position.z-q.z)<1.3){hitFoe(f,1,5,null,drone.pos);done=true;break}}
-   if(!done&&bossInside(m.position,.4)){bossHurt(2);done=true}
+   if(!done){const B=bossInside(m.position,.4);if(B){bossHurt(B,2);done=true}}
    if(!done)for(const q of bubbles)if(q.m.position.distanceTo(m.position)<1.7){popBubble(q,true);score+=30;done=true;break}
    if(!done)for(const o of propEntities){const u=o.userData;if(u.kind!=='car'||heldProp===o)continue;
     if(Math.abs(m.position.x-o.position.x)<1.2&&Math.abs(m.position.z-o.position.z)<2.4&&m.position.y<o.position.y+1.8){if((u.hits=(u.hits||0)+1)>=5){burst(o.position);kill(o)}else puff(sphG,0xffd27a,m.position,.05,4,.15,.8);done=true;break}}}
   if(!done&&inBox(m.position)){puff(sphG,0xffd27a,m.position,.05,4,.15,.8);done=true}
   if(done){scene.remove(m);dShots.splice(i,1)}}}
 // каждый кадр: модель дрона кренится по скорости, винты крутятся; панель с батареей
-function droneFrame(dt,now){const d=drone,el=$('dr');el.style.display=d.on?'block':'none';for(const r of droneRotors)r.rotation.y+=45*dt;if(!d.on)return;
+function droneFrame(dt,now){const d=drone,el=$('dr');el.style.display=d.on||ride.k?'block':'none';for(const r of droneRotors)r.rotation.y+=45*dt;if(!d.on)return;
  const fx=-Math.sin(d.yaw),fz=-Math.cos(d.yaw),fv=d.v.x*fx+d.v.z*fz,sv=d.v.x*-fz+d.v.z*fx;droneG.position.copy(d.pos);droneG.rotation.set(-fv*.022,d.yaw,-sv*.022,'YXZ');
  put(el,`ДРОН · батарея ${Math.ceil(d.bat/90*100)}% · ${Math.round(d.v.length()*3.6)} км/ч · `+(coarse?'Удар — огонь, Рывок — таран':'ЛКМ — огонь, ПКМ — таран, X — вернуть'))}
 
-// шаг: пока летает дрон, ввод уходит ему, а герой стоит без управления (гравитация и столкновения работают)
-function step(dt){if(drone.on){droneStep(dt);const kk=k;k={};stepHero(dt);k=kk}else stepHero(dt);dShotsStep(dt)}
+// --- техника: 1 — дрон, 2 — боевой робот, 3 — полицейский вертолёт, 4 — ракета верхом, 5 — танк; та же цифра или X — выйти.
+// герой едет внутри (на ракете — верхом): удары по нему бьют по броне, кончилась броня — взрыв, героя выбрасывает.
+// свои снаряды бьют бандитов, боссов и машины; чужие (по сети) — картинка и урон только по своей технике
+const VEH=[null,null,
+ {name:'Робот',hp:600,want:26,ty:11,r:3.4,cy:7,seat:3,top:14},
+ {name:'Вертолёт',hp:320,want:20,ty:1.5,r:3.2,cy:0,seat:0,top:1.5},
+ {name:'Ракета',hp:40,want:9,ty:1.4,r:1.3,cy:0,seat:1,top:1.5},
+ {name:'Танк',hp:700,want:16,ty:4,r:3.4,cy:1.8,seat:1.5,top:4}];
+const ride={boom:0,k:0,pos:new V3(),v:new V3(),aim:new V3(),yaw:0,hp:0,fireT:0,f2T:0,pT:-9,ph:0,tur:0,el:0,gun:1,onG:false,wat:false,jet:false,fuel:0,salvo:0,salvoT:0,trT:0,arm:0,stepS:0,tilt:0,roll:0,ay:0,ap:0,aux:0,cd:[0,0,0,0,0,0]},shots=[];
+const vt1=new V3(),vt2=new V3(),vt3=new V3(),ZN=new V3(0,0,-1);
+const hitR=()=>ride.k?VEH[ride.k].r:0,vehC=o=>o.set(ride.pos.x,ride.pos.y+VEH[ride.k].cy,ride.pos.z);
+// толчок: героя отбрасывает, технику — заметно слабее
+function knock(x,y,z){if(ride.k){ride.v.x+=x*.25;ride.v.y+=y*.25;ride.v.z+=z*.25}else{v.x+=x;v.y+=y;v.z+=z}}
+const VMOD=[null,null,new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group()],TP=(o,n)=>{o.userData.part=n;return o};
+// робот ~14 м: ноги с коленями, корпус с кабиной, руки-пушки, ракетные блоки на плечах, сопла в пятках
+{const R0=TP(VMOD[2],'body'),gm=LmB(0x5d6470),dk=LmB(0x2c3038),ac=LmB(0xe2762c),gl=new THREE.MeshBasicMaterial({color:0x7df9ff});
+ const hip=TP(new THREE.Group(),'hip');hip.position.y=7.2;R0.add(hip);M(new THREE.BoxGeometry(4.2,1.6,3),dk,hip,0,0,0);
+ const tor=TP(new THREE.Group(),'tor');tor.position.y=.8;hip.add(tor);
+ M(new THREE.BoxGeometry(6.4,4.6,4.6),gm,tor,0,2.6,0);M(new THREE.BoxGeometry(6.6,.9,4.8),ac,tor,0,.6,0);M(new THREE.BoxGeometry(3.6,1.5,.3),gl,tor,0,3.3,-2.35);M(new THREE.BoxGeometry(5.2,1.2,1.4),gm,tor,0,4.9,.9);
+ for(const s of[-1,1]){M(new THREE.BoxGeometry(1.8,1.6,2.6),dk,tor,s*2.4,5.6,.2);for(let q=0;q<4;q++)M(new THREE.CylinderGeometry(.22,.22,.3,8).rotateX(Math.PI/2),ac,tor,s*2.4+(q%2-.5)*.7,5.6+(q<2?.35:-.35),-1.1);
+  const sh=TP(new THREE.Group(),s<0?'aL':'aR');sh.position.set(s*4,3.4,0);tor.add(sh);
+  M(new THREE.BoxGeometry(1.6,1.8,1.8),ac,sh,0,0,0);M(new THREE.BoxGeometry(1.3,3.4,1.3),gm,sh,s*.3,-2.2,0);M(new THREE.BoxGeometry(1.5,1.5,3.2),dk,sh,s*.3,-4.4,-.8);M(new THREE.CylinderGeometry(.3,.3,2.4,8).rotateX(Math.PI/2),dk,sh,s*.3,-4.4,-3.2);
+  const lg=TP(new THREE.Group(),s<0?'lL':'lR');lg.position.x=s*1.9;hip.add(lg);M(new THREE.BoxGeometry(1.5,3.8,1.7),gm,lg,0,-1.9,0);
+  const kn=TP(new THREE.Group(),s<0?'kL':'kR');kn.position.y=-3.8;lg.add(kn);M(new THREE.BoxGeometry(1.4,3.2,1.5),dk,kn,0,-1.6,0);M(new THREE.BoxGeometry(2.4,.6,3.4),gm,kn,0,-3.1,-.4);
+  TP(M(new THREE.ConeGeometry(.6,2.2,10).rotateX(Math.PI).translate(0,-1.1,0),flameM,kn,0,-3.4,.9),s<0?'jL':'jR').visible=false}}
+// полицейский вертолёт: бело-синий, пулемёт под носом, ракетные блоки по бокам, полозья — на них может встать друг
+{const H0=TP(VMOD[3],'body'),wh=LmB(0xe9edf2),bu=LmB(0x1d3f8f),dk=LmB(0x22262c),gl=new THREE.MeshLambertMaterial({color:0x1a2a3a,emissive:0x0a1a2a});
+ M(new THREE.SphereGeometry(1.7,14,10),wh,H0,0,0,0,1.15,1,1.9);M(new THREE.SphereGeometry(1.75,14,10,0,6.283,1.2,.45),bu,H0,0,0,0,1.16,1,1.91);
+ M(new THREE.SphereGeometry(1.25,12,8),gl,H0,0,.35,-1.9,1,.8,.85);M(new THREE.CylinderGeometry(.32,.18,5.6,8).rotateX(Math.PI/2),wh,H0,0,.3,4.6);
+ M(new THREE.BoxGeometry(.12,2.2,1),bu,H0,0,1,7.2);TP(M(new THREE.BoxGeometry(.08,2.4,.32),dk,H0,.32,.5,7.2),'tl');
+ M(new THREE.CylinderGeometry(.25,.25,.7,8),dk,H0,0,1.9,0);const rot=TP(M(new THREE.BoxGeometry(13,.08,.45),dk,H0,0,2.25,0),'rot');M(new THREE.BoxGeometry(.45,.08,13),dk,rot,0,0,0);
+ for(const s of[-1,1]){M(new THREE.BoxGeometry(.18,.18,5),dk,H0,s*1.4,-2.1,0);M(new THREE.BoxGeometry(.12,.9,.12),dk,H0,s*1.15,-1.65,-1.2);M(new THREE.BoxGeometry(.12,.9,.12),dk,H0,s*1.15,-1.65,1.2);
+  M(new THREE.CylinderGeometry(.28,.28,1.6,8).rotateX(Math.PI/2),dk,H0,s*2,-.6,-.4)}
+ M(new THREE.CylinderGeometry(.1,.1,1.4,6).rotateX(Math.PI/2),dk,H0,0,-1.3,-2.6);
+ TP(M(new THREE.SphereGeometry(.16,6,4),new THREE.MeshBasicMaterial({color:0xff2b2b}),H0,-.5,1.35,-.6),'lr');TP(M(new THREE.SphereGeometry(.16,6,4),new THREE.MeshBasicMaterial({color:0x2b6bff}),H0,.5,1.35,-.6),'lb');
+ H0.scale.setScalar(1.25)}
+// ракета ~7 м: нос вперёд (-z), стабилизаторы, пламя из сопла; сверху сидит герой
+{const K0=TP(VMOD[4],'body'),wh=LmB(0xd8dde4),rd=LmB(0xc8202a),dk=LmB(0x2a2d33);
+ M(new THREE.CylinderGeometry(.55,.55,5,14).rotateX(Math.PI/2),wh,K0,0,0,0);M(new THREE.ConeGeometry(.55,1.6,14).rotateX(-Math.PI/2),rd,K0,0,0,-3.3);
+ for(let q=0;q<4;q++){const f=new THREE.Group();f.position.z=2.1;f.rotation.z=q*Math.PI/2+Math.PI/4;K0.add(f);M(new THREE.BoxGeometry(.08,1,1.2),rd,f,0,.9,0)}
+ M(new THREE.CylinderGeometry(.45,.35,.5,12).rotateX(Math.PI/2),dk,K0,0,0,2.75);
+ TP(M(new THREE.ConeGeometry(.42,2.6,10).rotateX(Math.PI/2).translate(0,0,1.3),flameM,K0,0,0,3),'fl')}
+// танк: корпус с гусеницами, башня крутится за камерой, длинный ствол поднимается к прицелу, пулемёт на крыше башни
+{const T0=TP(VMOD[5],'body'),ol=LmB(0x4f5a3a),dk=LmB(0x23261f),wl=LmB(0x34382c);
+ M(new THREE.BoxGeometry(4.4,1.3,7.2),ol,T0,0,1.35,0);M(new THREE.BoxGeometry(3.8,.6,6.2),ol,T0,0,2.2,.2);M(new THREE.BoxGeometry(4,.6,1),ol,T0,0,1.55,-3.8).rotation.x=.5;
+ for(const s of[-1,1]){M(new THREE.BoxGeometry(1.1,1.4,7.6),dk,T0,s*2.45,.75,0);for(let q=0;q<5;q++)M(new THREE.CylinderGeometry(.5,.5,1.15,10).rotateZ(Math.PI/2),wl,T0,s*2.45,.55,-2.8+q*1.4)}
+ const tur=TP(new THREE.Group(),'tur');tur.position.y=2.5;T0.add(tur);
+ M(new THREE.CylinderGeometry(1.9,2.2,1.2,14),ol,tur,0,.6,.3,1,1,1.15);M(new THREE.BoxGeometry(1,.5,1),dk,tur,.8,1.4,.8);M(new THREE.CylinderGeometry(.07,.07,1.2,6).rotateX(Math.PI/2),dk,tur,.8,1.75,.1);
+ const gun=TP(new THREE.Group(),'gun');gun.position.set(0,.6,-1.8);tur.add(gun);
+ M(new THREE.CylinderGeometry(.2,.26,5.2,10).rotateX(Math.PI/2),dk,gun,0,0,-2.6);M(new THREE.CylinderGeometry(.3,.3,.7,10).rotateX(Math.PI/2),dk,gun,0,0,-5.1)}
+const vParts=g=>{const P={};g.traverse(x=>{if(x.userData.part)P[x.userData.part]=x});return P};
+for(const g of VMOD)if(g){g.visible=false;scene.add(g)}
+const VM=VMOD.map(g=>g&&{g,P:vParts(g),amp:0,lph:0});
+// копия модели для чужого игрока: те же меши и материалы, свои шарниры
+function vClone(n){const g=VMOD[n].clone(true);g.visible=false;scene.add(g);return{g,P:vParts(g),amp:0,lph:0}}
+// поза модели: курс yw, наклон tilt, прицел (ay, ap) и доп. параметр aux (у робота — фаза шага, у вертолёта — крен)
+function vPose(V0,n,yw,tilt,ay,ap,aux,dt,now){const g=V0.g,P=V0.P;
+ if(n===2){g.rotation.set(0,yw,0);V0.amp+=((Math.abs(aux-V0.lph)>1e-4?1:0)-V0.amp)*Math.min(1,5*dt);V0.lph=aux;const s=Math.sin(aux),c=Math.cos(aux),a=V0.amp;
+  P.lL.rotation.x=s*.5*a;P.lR.rotation.x=-s*.5*a;P.kL.rotation.x=-Math.max(0,c)*.8*a;P.kR.rotation.x=-Math.max(0,-c)*.8*a;P.hip.position.y=7.2+Math.abs(c)*.25*a;
+  let d=ay-yw;d=Math.atan2(Math.sin(d),Math.cos(d));P.tor.rotation.y=cl(d,-.9,.9);P.aL.rotation.x=P.aR.rotation.x=cl(ap,-.6,1.2)}
+ else if(n===3){g.rotation.set(tilt,yw,aux,'YXZ');P.rot.rotation.y+=30*dt;P.tl.rotation.x+=40*dt;const b=now%.6<.3;P.lr.visible=b;P.lb.visible=!b}
+ else if(n===4){g.rotation.set(tilt,yw,0,'YXZ');P.fl.scale.set(1,1,.8+Math.random()*.5)}
+ else{g.rotation.set(0,yw,0);P.tur.rotation.y=aux-yw;P.gun.rotation.x=tilt}}
+// снаряды: скорость, гравитация, урон бандиту и боссу, радиус взрыва, урон чужой технике
+const ST={b:{sp:200,g:0,foe:1,boss:1.5,R:0,pvp:5,life:1.4},c:{sp:170,g:0,foe:2,boss:4,R:2.5,pvp:12,life:2},r:{sp:80,g:0,foe:3,boss:22,R:7,pvp:45,life:5},s:{sp:140,g:6,foe:3,boss:35,R:8,pvp:80,life:5},R:{sp:0,g:12,foe:3,boss:60,R:14,pvp:120,life:10}};
+const SCODE=['r','s','R'],shotGeo={b:bulletGeo,c:new THREE.CylinderGeometry(.12,.12,1.6,6),r:new THREE.CylinderGeometry(.16,.16,1.3,8),s:new THREE.SphereGeometry(.3,8,6)},
+ shotMat={b:new THREE.MeshBasicMaterial({color:0xffe28a}),c:new THREE.MeshBasicMaterial({color:0xffb35a}),r:LmB(0xe8ecf2),s:new THREE.MeshBasicMaterial({color:0xffd27a})};
+function addVShot(T,o,vel,vis){if(vis&&(shots.length>150||T==='R'&&shots.filter(s=>s.T==='R').length>5))return;const m=T==='R'?VMOD[4].clone(true):new THREE.Mesh(shotGeo[T],shotMat[T]);m.visible=true;m.position.copy(o);scene.add(m);shots.push({T,m,v:vel.clone(),t:ST[T].life,vis,arm:.12,trT:0})}
+// выстрел своей техники в точку to; ракеты и снаряды рассылаются остальным, очереди они рисуют сами по флагу огня
+function fireV(T,o,to){const S=ST[T];vt3.subVectors(to,o).normalize().multiplyScalar(S.sp);addVShot(T,o,vt3,false);puff(sphG,0xffd27a,o,.06,4,.12,.8);
+ if((T==='r'||T==='s')&&netOn)net.publish(NP+'x',JSON.stringify({id:NET_ID,s:[SCODE.indexOf(T),...r10(o),...r10(vt3)]}))}
+const muz=(n,x,y,z)=>{const V0=VM[ride.k];V0.g.updateMatrixWorld(true);return V0.P[n].localToWorld(vt1.set(x,y,z))};
+// точка под прицелом: первый дом на луче камеры или босс, мимо которого луч проходит вплотную
+function aimPt(out){camera.getWorldDirection(dir);let t=Math.min(firstHit(camera.position,dir,600),600);
+ for(const B of BOSSES){if(!B.alive||B.dying)continue;vt2.subVectors(B.c,camera.position);const tb=vt2.dot(dir);if(tb>0&&tb<t&&vt2.addScaledVector(dir,-tb).length()<Math.max(B.box[0],(B.box[2]-B.box[1])/2))t=tb}
+ return out.copy(camera.position).addScaledVector(dir,t)}
+// машина из потока разбита: вспышка, а сама она появляется на другой полосе
+function carSmash(c,free){const L=c.L;burst(vt3.set(L.ax?L.off:c.s,.8,L.ax?c.s:L.off));const N=LANES[Math.floor(Math.random()*LANES.length)];c.L=N;c.s=N.lo+Math.random()*(N.hi-N.lo);c.v=0;if(!free)score+=50}
+// взрыв снаряда: свой — урон всем в радиусе; чужой — только по своей технике, а героя без техники отбрасывает
+function pvpSplash(at,R0,dmg){if(ride.k){const d=vehC(vt2).distanceTo(at),r=R0+hitR();if(d<r)vehHurt(dmg*(1-d/r)+5)}
+ else if(!drone.on){const d=at.distanceTo(p);if(d<R0){vt2.subVectors(p,at).normalize();v.addScaledVector(vt2,14*(1-d/R0));v.y+=5}}}
+function blast(at,S,mine,skip){const R0=S.R;if(!mine){pvpSplash(at,R0,S.pvp);return}
+ for(const f of foes)if(!f.ko&&f.g.position.distanceTo(at)<R0)hitFoe(f,S.foe,16,null,at);
+ for(const B of BOSSES)if(B!==skip&&B.alive&&!B.dying&&bossDist(B,at)<R0*.6)bossHurt(B,S.boss*.5);
+ if(R0<4)return;
+ for(const o of[...propEntities]){const u=o.userData;if(heldProp===o||o.position.distanceTo(at)>R0)continue;if(u.kind==='car'){burst(o.position);kill(o)}else{u.thrown=true;vt2.subVectors(o.position,at).setY(0).normalize();u.velocity.set(vt2.x*14,9,vt2.z*14);if(u.kind==='npc')u.down=0}}
+ for(const c of cars){const L=c.L;if(at.y<R0&&Math.hypot((L.ax?L.off:c.s)-at.x,(L.ax?c.s:L.off)-at.z)<R0*.8)carSmash(c)}
+ for(const q of[...bubbles])if(q.m.position.distanceTo(at)<R0)popBubble(q,true);
+ for(const q of[...rocks])if(q.m.position.distanceTo(at)<R0)rockBoom(q,true)}
+function shotBoom(s,P,B){const S=ST[s.T],g=near(P);
+ if(S.R>=7){burst(P);if(S.R>10){puff(sphG,0xffd27a,P,1.2,3,.7,.8);puff(sphG,0x3b3340,P,2,1.4,1.8,.5);shake=Math.max(shake,1.2*g)}}
+ else if(S.R>0){puff(sphG,0xffa33c,P,.25,3.5,.3,.85);noise(.25,'lowpass',1800,200,.35*g)}
+ else puff(sphG,0xffd27a,P,.05,4,.15,.8);
+ if(S.R>0&&!s.me)blast(P,S,!s.vis,B)}
+// чужая техника для попаданий: центр корпуса
+const peerVeh=(o,out)=>{const V0=o.vk>1&&o.vm&&o.vm[o.vk];if(!V0||!V0.g.visible)return null;const Q=V0.g.position;return out.set(Q.x,Q.y+VEH[o.vk].cy,Q.z)};
+function shotsStep(dt){const now=performance.now()/1000;
+ for(let i=shots.length-1;i>=0;i--){const s=shots[i],S=ST[s.T],m=s.m,P=m.position;s.v.y-=S.g*dt;P.addScaledVector(s.v,dt);s.t-=dt;s.arm-=dt;
+  vt1.copy(s.v).normalize();if(s.T==='R')m.quaternion.setFromUnitVectors(ZN,vt1);else if(s.T!=='s')m.quaternion.setFromUnitVectors(UP,vt1);
+  if((s.T==='r'||s.T==='R')&&now>s.trT){s.trT=now+.05;puff(sphG,0xc9ccd2,P,.12,1.8,.7,.35)}
+  let hit=s.t<=0||inBox(P),B=null;
+  if(!hit){const gy=topAt(P.x,P.z,P.y+.5);hit=gy<-1e8?P.y<-.9:P.y<gy}
+  if(!hit&&!s.vis){for(const f of foes){if(f.ko)continue;const q=f.g.position;if(Math.hypot(P.x-q.x,P.y-q.y-1,P.z-q.z)<1.3){hitFoe(f,S.foe,S.R?14:5,null,P);hit=true;break}}
+   if(!hit&&(B=bossInside(P,.4))){bossHurt(B,S.boss);hit=true}
+   if(!hit)for(const q of bubbles)if(q.m.position.distanceTo(P)<1.8){popBubble(q,true);score+=30;hit=true;break}
+   if(!hit)for(const q of rocks)if(q.m.position.distanceTo(P)<2.4){rockBoom(q,true);score+=40;hit=true;break}
+   if(!hit)for(const o of propEntities){const u=o.userData;if(u.kind!=='car'||heldProp===o)continue;
+    if(Math.abs(P.x-o.position.x)<1.2&&Math.abs(P.z-o.position.z)<2.4&&P.y<o.position.y+1.8){if(S.R>=7||(u.hits=(u.hits||0)+(s.T==='c'?2:1))>=5){burst(o.position);kill(o)}else puff(sphG,0xffd27a,P,.05,4,.15,.8);hit=true;break}}}
+  if(!hit&&s.vis&&ride.k&&vehC(vt2).distanceTo(P)<hitR()+1.2){vehHurt(S.pvp);hit=s.me=true}
+  if(!hit&&s.arm<=0)for(const o of peersMP.values()){const c=peerVeh(o,vt2);if(c&&c.distanceTo(P)<VEH[o.vk].r+1){hit=true;break}}
+  if(hit){shotBoom(s,P,B);scene.remove(m);shots.splice(i,1)}}}
+// техника — вертикальный цилиндр радиуса r и высоты hh: из домов выталкиваем по горизонтали, на крыши встаём сверху
+function vehCollide(P,V,r,hh){const ci=Math.round(P.x/SX),cj=Math.round(P.z/SZ);
+ for(let a=ci-1;a<=ci+1;a++)for(let b=cj-1;b<=cj+1;b++)for(const B of boxes[a+','+b]||[]){
+  if(P.y>=B.h-.8||P.y+hh<=B.y0)continue;
+  const dx=P.x-cl(P.x,B.x0,B.x1),dz=P.z-cl(P.z,B.z0,B.z1),d=Math.hypot(dx,dz);if(d>=r)continue;
+  if(d<1e-6){const e=[[P.x-B.x0,-1,0],[B.x1-P.x,1,0],[P.z-B.z0,0,-1],[B.z1-P.z,0,1]].reduce((a,c)=>c[0]<a[0]?c:a);if(e[1])P.x=(e[1]<0?B.x0:B.x1)+e[1]*r;else P.z=(e[2]<0?B.z0:B.z1)+e[2]*r;continue}
+  const nx=dx/d,nz=dz/d;P.x+=nx*(r-d);P.z+=nz*(r-d);const vn=V.x*nx+V.z*nz;if(vn<0){V.x-=vn*nx;V.z-=vn*nz}}}
+// вертолёт — шар: отскакивает от стен, возвращает силу удара
+function ballCollide(P,V,r){let imp=0;const ci=Math.round(P.x/SX),cj=Math.round(P.z/SZ);
+ for(let a=ci-1;a<=ci+1;a++)for(let b=cj-1;b<=cj+1;b++)for(const B of boxes[a+','+b]||[]){
+  const dx=P.x-cl(P.x,B.x0,B.x1),dy=P.y-cl(P.y,B.y0,B.h),dz=P.z-cl(P.z,B.z0,B.z1),d=Math.hypot(dx,dy,dz);if(d>=r)continue;
+  if(d<1e-6){P.y=B.h+r;if(V.y<0)V.y=0;continue}
+  const nx=dx/d,ny=dy/d,nz=dz/d;P.x+=nx*(r-d);P.y+=ny*(r-d);P.z+=nz*(r-d);const vn=V.x*nx+V.y*ny+V.z*nz;if(vn<0){imp=Math.max(imp,-vn);V.x-=1.4*vn*nx;V.y-=1.4*vn*ny;V.z-=1.4*vn*nz}}
+ return imp}
+// техника упирается в тела боссов (по горизонтали в их осях)
+function bossPush(P,V,r,hh){for(const B of BOSSES){if(!B.alive||B.dying)continue;const b=B.box;bossLoc(B,P.x,P.y+hh*.5,P.z,bl);if(bl.y+hh*.5<b[1]||bl.y-hh*.5>b[2])continue;
+ const ox=b[0]+r-Math.abs(bl.x),oz=b[3]+r-Math.abs(bl.z);if(ox<=0||oz<=0)continue;if(ox<oz)bl.x+=Math.sign(bl.x||1)*ox;else bl.z+=Math.sign(bl.z||1)*oz;
+ bossWorld(B,bl.x,0,bl.z,bw);P.x=bw.x;P.z=bw.z;V.multiplyScalar(.5)}}
+// давит всё под собой: бандитов, машины (и в потоке), прохожих и гидранты раскидывает
+function crushAt(P,r){const now=performance.now()/1000;
+ for(const f of foes)if(!f.ko&&now>f.bump&&Math.hypot(f.g.position.x-P.x,f.g.position.z-P.z)<r&&Math.abs(f.g.position.y-P.y)<3){f.bump=now+.6;hitFoe(f,3,14,'Раздавлен!',P)}
+ for(const o of[...propEntities]){const u=o.userData;if(u.thrown||heldProp===o)continue;const dx=o.position.x-P.x,dz=o.position.z-P.z;if(dx*dx+dz*dz>r*r||Math.abs(o.position.y-P.y)>3)continue;
+  if(u.kind==='car'){burst(o.position);kill(o);score+=50}else{u.thrown=true;vt2.set(dx,0,dz).normalize();u.velocity.set(vt2.x*9,7,vt2.z*9);if(u.kind==='npc')u.down=0}}
+ if(P.y<2.5)for(const c of cars){const L=c.L;if(Math.abs((L.ax?L.off:c.s)-P.x)<r+.9&&Math.abs((L.ax?c.s:L.off)-P.z)<r+.9)carSmash(c)}}
+function vehHurt(n){const now=performance.now()/1000;if(!ride.k||now<invT)return;ride.hp-=n;hurtT=now;sfx.hurt();shake=Math.max(shake,.3);if(ride.hp<=0&&!ride.boom)ride.boom=ride.k===4?2:1}
+// техника взорвалась (или ракета врезалась): большой взрыв, героя подбрасывает
+function vehBoom(rk){const at=vehC(new V3()),k0=ride.k,S=rk?ST.R:{foe:3,boss:25,R:9,pvp:60},B=rk?bossInside(at,4):null;
+ burst(at);puff(sphG,0xffd27a,at,1.2,3,.7,.8);shake=Math.max(shake,1.1);if(B)bossHurt(B,60,'Ракета в цель! −60');blast(at,S,true,B);
+ if(netOn)net.publish(NP+'x',JSON.stringify({id:NET_ID,p:r10(at),r:S.R}));
+ vehExit(rk?'rk':'dead');if(!rk)showToast(VEH[k0].name+' уничтожен!')}
+const VTIP=[,,'Робот: WASD — шаг, Shift — бег, Пробел — прыжок на ускорителях, ЛКМ — пушки, ПКМ — залп ракет, E — удар кулаком, 2 или X — выйти',
+ 'Вертолёт: WASD — полёт, Пробел/C — вверх/вниз, Shift — форсаж, ЛКМ — пулемёт, ПКМ — ракеты; друг может встать на полозья. 3 или X — выйти',
+ 'Ракета: рули мышью, A/D и W/S — подруливание, Shift — турбо; врежься во что угодно — взрыв. E или X — соскочить',
+ 'Танк: W/S — ход, A/D — поворот, башня смотрит за камерой, ЛКМ — пушка, ПКМ — пулемёт, Shift — полный ход. 5 или X — выйти'];
+const VTIP_M=[,,'Робот: джойстик — шаг, «Бег», «Прыжок», «Пушки», «Ракеты», «Удар»','Вертолёт: джойстик — полёт, «Вверх» и «Вниз», «Пулемёт», «Ракеты»','Ракета: рули свайпом, «Турбо»; «Соскочить» — спрыгнуть','Танк: джойстик — ход и поворот, башня за камерой, «Пушка», «Пулемёт»'];
+function vehKey(n){if(!playing())return;if(n===1){if(ride.k)vehExit();droneToggle();return}if(drone.on)droneEnd();if(ride.k===n){vehExit();return}if(ride.k)vehExit();vehEnter(n)}
+function vehEnter(n){const now=performance.now()/1000,R0=ride,V0=VEH[n];
+ if(now<R0.cd[n]){showToast(V0.name+': ещё '+Math.ceil(R0.cd[n]-now)+' с');return}
+ const fx=-Math.sin(yaw),fz=-Math.cos(yaw);R0.v.set(0,0,0);
+ if(n===2||n===5){let x=p.x+fx*(V0.r+2),z=p.z+fz*(V0.r+2);if(!freeAt(x,p.y+2,z,V0.r)){x=p.x;z=p.z}let gy=topAt(x,z,p.y+1);
+  if(gy<-1e8){if(n===5){showToast('Танку нужна земля');return}gy=-5}R0.pos.set(x,gy,z)}
+ else if(n===3){R0.pos.set(p.x,p.y+3.4,p.z);R0.v.set(v.x*.5,0,v.z*.5)}
+ else{R0.pos.set(p.x,p.y+1.2,p.z);camera.getWorldDirection(dir);vt1.copy(dir);if(onG)vt1.y=Math.max(vt1.y,.3);R0.v.copy(vt1.normalize()).multiplyScalar(Math.max(40,v.length()))}
+ Object.assign(R0,{boom:0,k:n,hp:V0.hp,yaw,tur:yaw,el:0,fireT:0,f2T:0,pT:-9,ph:0,onG:false,wat:false,jet:false,fuel:n===4?14:1.8,salvo:0,arm:.25,stepS:0,tilt:0,roll:0});
+ if(heldProp){heldProp.userData.thrown=true;heldProp.userData.velocity.set(0,0,0);heldProp=null}
+ anchor=null;zip=crawl=false;strike=null;hero.visible=n===4;VM[n].g.visible=true;sfx.zip();showToast(coarse?VTIP_M[n]:VTIP[n],5000)}
+// выход: из робота и танка — рядом сбоку, из вертолёта — прыжок вниз, с ракеты — соскок (она летит дальше сама)
+function vehExit(how){const n=ride.k;if(!n)return;const now=performance.now()/1000,R0=ride;ride.k=0;VM[n].g.visible=false;hero.visible=true;k.fire=k.fire2=false;camD=Math.min(camD,6);heliLight(false);
+ R0.cd[n]=now+(how==='dead'?20:how==='rk'?5:2);
+ if(n===4){p.copy(R0.pos);p.y+=1.5;
+  if(how==='rk'){v.set(R0.v.x*.15,24,R0.v.z*.15);invT=now+1;showToast('Бум! Хватайся паутиной')}
+  else if(how!=='dead'){addVShot('R',R0.pos,R0.v,false);if(netOn)net.publish(NP+'x',JSON.stringify({id:NET_ID,s:[2,...r10(R0.pos),...r10(R0.v)]}));v.copy(R0.v).multiplyScalar(.45);v.y=Math.max(v.y,8)+6;showToast('Соскочил — ракета летит дальше')}}
+ else if(n===3){p.copy(R0.pos);p.y-=3;v.copy(R0.v)}
+ else{const s=VEH[n].r+1.6,ex=R0.pos.x+Math.cos(R0.yaw)*s,ez=R0.pos.z-Math.sin(R0.yaw)*s;p.set(ex,R0.pos.y+PR+.2,ez);if(!freeAt(ex,R0.pos.y+1.2,ez,PR))p.set(R0.pos.x,R0.pos.y+VEH[n].top+PR,R0.pos.z);v.set(0,0,0)}
+ if(how==='dead'){v.y=Math.max(v.y,14);invT=now+1.5}
+ anchor=null;zip=crawl=false;onG=false;collide()}
+function vehE(){if(ride.k===4)vehExit();else if(ride.k===2)mechPunch()}
+function mechPunch(){const now=performance.now()/1000,R0=ride;if(now<R0.pT+.9)return;R0.pT=now;sfx.swish();
+ const fx=-Math.sin(R0.yaw),fz=-Math.cos(R0.yaw),at=vt1.set(R0.pos.x+fx*6,R0.pos.y+8,R0.pos.z+fz*6);let n=0;
+ for(const B of BOSSES)if(B.alive&&!B.dying&&bossDist(B,at)<4){bossHurt(B,30,'Удар робота! −30');n++}
+ for(const f of foes)if(!f.ko&&Math.hypot(f.g.position.x-at.x,f.g.position.z-at.z)<6&&Math.abs(f.g.position.y-R0.pos.y)<6){hitFoe(f,3,24,null,R0.pos);n++}
+ for(const o of propEntities){const u=o.userData;if(u.thrown||heldProp===o)continue;if(Math.hypot(o.position.x-at.x,o.position.z-at.z)<6&&Math.abs(o.position.y-R0.pos.y)<6){u.thrown=true;u.velocity.set(fx*30,10,fz*30);if(u.kind==='npc')u.down=0;n++}}
+ if(n){shake=Math.max(shake,.5);sfx.punch()}}
+function mechStomp(s){const P=ride.pos;shake=Math.max(shake,Math.min(1,.3+s*.03));sfx.land(1);puff(ringG,0xcfd8ff,vt1.set(P.x,P.y+.1,P.z),3,2.6,.6,.6);
+ if(s<16)return;let n=0;
+ for(const f of foes)if(!f.ko&&f.g.position.distanceTo(P)<10){hitFoe(f,3,18,null,P);n++}
+ for(const B of BOSSES)if(B.alive&&!B.dying&&bossDist(B,P)<8)bossHurt(B,20,'Робот прыгнул на босса!');
+ for(const o of[...propEntities]){const u=o.userData;if(heldProp===o||u.thrown||o.position.distanceTo(P)>9)continue;u.thrown=true;vt2.subVectors(o.position,P).setY(0).normalize();u.velocity.set(vt2.x*10,9,vt2.z*10);if(u.kind==='npc')u.down=0}
+ if(n)showToast('Удар с прыжка!')}
+function mechStep(dt,now,ax,az){const R0=ride,sp=(k.shift||k.tw?15:8.5)*(R0.wat?.55:1);
+ let d=yaw-R0.yaw;d=Math.atan2(Math.sin(d),Math.cos(d));R0.yaw+=d*Math.min(1,3.5*dt);
+ const f=Math.min(1,(R0.onG?5:1.2)*dt);R0.v.x+=(ax*sp-R0.v.x)*f;R0.v.z+=(az*sp-R0.v.z)*f;
+ // ускорители: Пробел на земле — прыжок, в воздухе держать — тяга, пока не кончилось топливо
+ if(k.space&&R0.onG){R0.v.y=16;R0.onG=false;sfx.zip()}
+ R0.jet=!!k.space&&!R0.onG&&R0.fuel>0;if(R0.jet){R0.fuel-=dt;R0.v.y+=34*dt}
+ R0.v.y-=30*dt;const vy=R0.v.y;R0.pos.addScaledVector(R0.v,dt);
+ vehCollide(R0.pos,R0.v,3.2,13);bossPush(R0.pos,R0.v,3.2,13);
+ let gy=topAt(R0.pos.x,R0.pos.z,R0.pos.y+1.5);R0.wat=gy<-1e8;if(R0.wat)gy=-5;
+ if(R0.pos.y<=gy){R0.pos.y=gy;if(!R0.onG&&vy<-12)mechStomp(-vy);R0.onG=true;R0.fuel=1.8;if(R0.v.y<0)R0.v.y=0}else if(R0.pos.y>gy+.4)R0.onG=false;
+ const hs=Math.hypot(R0.v.x,R0.v.z);
+ if(R0.onG&&hs>1){R0.ph+=hs*dt*.42;const s=Math.sign(Math.sin(R0.ph));if(s!==R0.stepS){R0.stepS=s;sfx.land(.6);shake=Math.max(shake,.12);if(R0.wat)splash(vt1.set(R0.pos.x,-.85,R0.pos.z),2.5);crushAt(R0.pos,3.4)}}
+ R0.pos.x=cl(R0.pos.x,-520,520);R0.pos.z=cl(R0.pos.z,-440,440);
+ if(k.fire&&now>R0.fireT){R0.fireT=now+.13;R0.gun=-R0.gun;fireV('c',muz(R0.gun<0?'aL':'aR',R0.gun*.3,-4.4,-4.5),R0.aim);noise(.07,'bandpass',1800,600,.2)}
+ if(k.fire2&&!R0.salvo&&now>R0.f2T){R0.salvo=4;R0.salvoT=0;R0.f2T=now+4.5}
+ if(R0.salvo&&now>R0.salvoT){R0.salvo--;R0.salvoT=now+.13;fireV('r',muz('tor',(R0.salvo%2?1:-1)*2.4,5.6,-1.4),vt2.copy(R0.aim).add(vt3.set((Math.random()-.5)*4,(Math.random()-.5)*3,(Math.random()-.5)*4)));sfx.zip()}}
+function heliStep(dt,now,ax,az){const R0=ride,bo=k.shift||k.tw,top=bo?50:28,up=(k.space?1:0)-(k.c?1:0);
+ let d=yaw-R0.yaw;d=Math.atan2(Math.sin(d),Math.cos(d));R0.yaw+=d*Math.min(1,2.5*dt);
+ R0.v.x+=(ax*top-R0.v.x)*Math.min(1,1.5*dt);R0.v.z+=(az*top-R0.v.z)*Math.min(1,1.5*dt);R0.v.y+=(up*(bo?16:11)-R0.v.y)*Math.min(1,3*dt);
+ R0.pos.addScaledVector(R0.v,dt);const imp=ballCollide(R0.pos,R0.v,2.8);if(imp>12)vehHurt((imp-10)*3);bossPush(R0.pos,R0.v,3,4);
+ let gy=topAt(R0.pos.x,R0.pos.z,R0.pos.y);if(gy<-1e8)gy=-.9;
+ if(R0.pos.y<gy+2.6){R0.pos.y=gy+2.6;if(R0.v.y<0){if(R0.v.y<-12)vehHurt(-R0.v.y*2);R0.v.y=0}R0.onG=true}else R0.onG=false;
+ R0.pos.x=cl(R0.pos.x,-520,520);R0.pos.z=cl(R0.pos.z,-440,440);R0.pos.y=Math.min(R0.pos.y,420);
+ if(k.fire&&now>R0.fireT){R0.fireT=now+.07;fireV('b',muz('body',0,-1.3,-3.4),R0.aim);noise(.05,'highpass',3000,5200,.12)}
+ if(k.fire2&&now>R0.f2T){R0.f2T=now+2.2;for(const s of[-1,1])fireV('r',muz('body',s*2,-.6,-1.4),R0.aim);sfx.zip()}}
+// ракета летит туда, куда смотрит камера; топливо — 14 с, потом падает; любое касание — взрыв
+function rocketStep(dt,now){const R0=ride;R0.fuel-=dt;R0.arm-=dt;
+ if(k.a)yaw+=1.5*dt;if(k.d)yaw-=1.5*dt;if(k.w)pit=cl(pit+1.1*dt,PMIN,1.3);if(k.s)pit=cl(pit-1.1*dt,PMIN,1.3);
+ const sp0=R0.v.length()||1;
+ if(R0.fuel>0){camera.getWorldDirection(dir);vt1.copy(R0.v).divideScalar(sp0).lerp(dir,Math.min(1,2.4*dt)).normalize();R0.v.copy(vt1).multiplyScalar(sp0+((k.shift||k.tw?75:46)-sp0)*Math.min(1,1.5*dt))}
+ else{if(R0.fuel+dt>0)showToast('Топливо кончилось — ракета падает');R0.v.y-=14*dt}
+ R0.pos.addScaledVector(R0.v,dt);
+ if(now>R0.trT){R0.trT=now+.035;vt2.copy(R0.v).normalize();puff(sphG,0xc9ccd2,vt1.copy(R0.pos).addScaledVector(vt2,-3.6),.15,1.7,.8,.4)}
+ const P=R0.pos;let boom=inBox(P)||Math.abs(P.x)>540||Math.abs(P.z)>460||P.y>480;
+ if(!boom&&R0.arm<=0){const gy=topAt(P.x,P.z,P.y+1);boom=(gy<-1e8?P.y<-.5:P.y<gy+.5)||!freeAt(P.x,P.y,P.z,1)||!!bossInside(P,1.5)||foes.some(f=>!f.ko&&f.g.position.distanceTo(P)<2.2)}
+ if(!boom&&R0.arm<=0)for(const o of propEntities)if(o.userData.kind==='car'&&o.position.distanceTo(P)<2.6){boom=true;break}
+ if(!boom&&R0.arm<=0)for(const o of peersMP.values()){const c=peerVeh(o,vt3);if(c&&c.distanceTo(P)<VEH[o.vk].r+1.5){boom=true;break}}
+ if(boom)vehBoom(true)}
+function tankStep(dt,now){const R0=ride,thr=(k.w?1:0)-(k.s?1:0),tn=(k.a?1:0)-(k.d?1:0);
+ let fv=-R0.v.x*Math.sin(R0.yaw)-R0.v.z*Math.cos(R0.yaw);
+ if(R0.onG){R0.yaw+=tn*1.25*dt;const tv=thr>0?(k.shift||k.tw?17:11):thr<0?-6:0;fv+=(tv-fv)*Math.min(1,(thr?1.4:3)*dt);R0.v.x=-Math.sin(R0.yaw)*fv;R0.v.z=-Math.cos(R0.yaw)*fv}
+ R0.v.y-=25*dt;const vy=R0.v.y;R0.pos.addScaledVector(R0.v,dt);vehCollide(R0.pos,R0.v,3.3,3);bossPush(R0.pos,R0.v,3.3,3);
+ const gy=topAt(R0.pos.x,R0.pos.z,R0.pos.y+1.2);
+ if(gy<-1e8){R0.onG=false;if(R0.pos.y<-2.2){splash(vt1.set(R0.pos.x,-.85,R0.pos.z),3);showToast('Танк утонул');vehExit('dead');return}}
+ else if(R0.pos.y<=gy){R0.pos.y=gy;if(vy<-18)vehHurt(-vy*3);R0.v.y=0;R0.onG=true}else if(R0.pos.y>gy+.3)R0.onG=false;
+ R0.pos.x=cl(R0.pos.x,-520,520);R0.pos.z=cl(R0.pos.z,-440,440);
+ if(Math.abs(fv)>2)crushAt(R0.pos,3.6);
+ // башня догоняет камеру, ствол — точку прицела с поправкой на падение снаряда
+ let d=yaw-R0.tur;d=Math.atan2(Math.sin(d),Math.cos(d));R0.tur+=cl(d,-2*dt,2*dt);
+ const mz=muz('gun',0,0,-5.6),hd=Math.hypot(R0.aim.x-mz.x,R0.aim.z-mz.z)||1,dy=R0.aim.y-mz.y,tf=Math.hypot(hd,dy)/ST.s.sp,te=cl(Math.atan2(dy+.5*ST.s.g*tf*tf,hd),-.15,1.15);R0.el+=cl(te-R0.el,-1.2*dt,1.2*dt);
+ if(k.fire&&now>R0.fireT){R0.fireT=now+1.6;const e=R0.el,o=muz('gun',0,0,-5.6);vt2.set(-Math.sin(R0.tur)*Math.cos(e),Math.sin(e),-Math.cos(R0.tur)*Math.cos(e));
+  fireV('s',o,vt3.copy(o).add(vt2));R0.v.x-=vt2.x*3;R0.v.z-=vt2.z*3;sfx.boom(.7);shake=Math.max(shake,.5);puff(sphG,0xffd27a,o,.4,3,.25,.9)}
+ if(k.fire2&&now>R0.f2T){R0.f2T=now+.09;fireV('b',muz('tur',.8,1.75,-.6),R0.aim);noise(.05,'highpass',2600,4800,.12)}}
+// шаг в технике: ввод по камере, сама техника, герой едет в ней; бандиты и предметы живут как обычно
+function rideStep(dt){const now=performance.now()/1000,R0=ride,n=R0.k;
+ if(k.arrowleft)yaw+=2*dt;if(k.arrowright)yaw-=2*dt;if(k.arrowup)pit=cl(pit-1.2*dt,PMIN,1.3);if(k.arrowdown)pit=cl(pit+1.2*dt,PMIN,1.3);
+ const ix=(k.d?1:0)-(k.a?1:0),iz=(k.w?1:0)-(k.s?1:0);let ax=-Math.sin(yaw)*iz+Math.cos(yaw)*ix,az=-Math.cos(yaw)*iz-Math.sin(yaw)*ix;const m=Math.hypot(ax,az);if(m>0){ax/=m;az/=m}
+ if(n===2)mechStep(dt,now,ax,az);else if(n===3)heliStep(dt,now,ax,az);else if(n===4)rocketStep(dt,now);else tankStep(dt,now);
+ if(!ride.k)return;
+ p.copy(R0.pos);p.y+=VEH[n].seat;v.copy(R0.v);onG=R0.onG;onBoss=null;anchor=null;crawl=zip=false;strike=null;
+ stepProps(dt);stepFoes(dt,now);if(now-hurtT>4&&hp<100)hp=Math.min(100,hp+10*dt)}
+// прожектор своего вертолёта светит в точку прицела
+const hlCone=new THREE.Mesh(new THREE.ConeGeometry(10,1,20,1,true).translate(0,-.5,0),new THREE.MeshBasicMaterial({color:0xfff2c4,transparent:true,opacity:.1,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide})),
+ hlSpot=new THREE.Mesh(new THREE.CircleGeometry(9,24).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:glowTex,color:0xfff0c0,transparent:true,opacity:.5,depthWrite:false}));
+hlCone.frustumCulled=false;hlCone.visible=hlSpot.visible=false;scene.add(hlCone,hlSpot);
+function heliLight(on){hlCone.visible=hlSpot.visible=on;if(!on)return;const P=ride.pos,A=ride.aim;let sx=A.x-P.x,sz=A.z-P.z;const l0=Math.hypot(sx,sz);if(l0>160){sx*=160/l0;sz*=160/l0}sx+=P.x;sz+=P.z;
+ const sy=Math.max(-.85,topAt(sx,sz,P.y-2))+.15;hlSpot.position.set(sx,sy,sz);vt2.set(sx-P.x,sy-P.y+1.5,sz-P.z);const l=vt2.length()||1;hlCone.position.set(P.x,P.y-1.5,P.z);hlCone.quaternion.setFromUnitVectors(DOWN,vt2.divideScalar(l));hlCone.scale.set(1,l,1)}
+// верхом на ракете: сидит на корпусе, ноги обхватывают, руки держатся за нос
+function rideHero(){const g=VM[4].g,sv=ride.v.length()||1;g.position.copy(ride.pos);g.rotation.set(Math.asin(cl(ride.v.y/sv,-1,1)),Math.atan2(-ride.v.x,-ride.v.z),0,'YXZ');g.updateMatrixWorld(true);hero.position.copy(g.localToWorld(vt1.set(0,.75,.7)));hero.quaternion.copy(g.quaternion);hq.copy(g.quaternion);
+ body.rotation.x=-.35;body.position.y=.95;for(const s of[0,1]){const sd=s?1:-1;A[s].sh.rotation.x=1.25;A[s].sh.rotation.z=-sd*.15;A[s].el.rotation.x=.35;L[s].h.rotation.x=1.35;L[s].h.rotation.z=sd*.45;L[s].kn.rotation.x=-1.5}}
+let drT=0;
+function rideFrame(dt,now){const R0=ride,n=R0.k,el=$('dr');for(let i=2;i<=5;i++)VM[i].g.visible=n===i;
+ if(!n){heliLight(false);return}
+ el.style.display='block';aimPt(R0.aim);const V0=VM[n];V0.g.position.copy(R0.pos);
+ const fx=-Math.sin(R0.yaw),fz=-Math.cos(R0.yaw),fv=R0.v.x*fx+R0.v.z*fz,sv=R0.v.x*-fz+R0.v.z*fx,aimFrom=(y)=>{R0.ay=Math.atan2(-(R0.aim.x-R0.pos.x),-(R0.aim.z-R0.pos.z));R0.ap=Math.atan2(R0.aim.y-y,Math.hypot(R0.aim.x-R0.pos.x,R0.aim.z-R0.pos.z)||1)};
+ if(n===2){aimFrom(R0.pos.y+11.4);R0.tilt=0;R0.aux=R0.ph}
+ else if(n===3){aimFrom(R0.pos.y-1.6);R0.tilt+=(cl(-fv*.012,-.4,.4)-R0.tilt)*Math.min(1,4*dt);R0.roll+=(cl(-sv*.012,-.4,.4)-R0.roll)*Math.min(1,4*dt);R0.aux=R0.roll}
+ else if(n===4){const s=R0.v.length()||1;R0.yaw=Math.atan2(-R0.v.x,-R0.v.z);R0.tilt=Math.asin(cl(R0.v.y/s,-1,1));R0.ay=R0.yaw;R0.ap=R0.tilt;R0.aux=0}
+ else{aimFrom(R0.pos.y+4.25);R0.tilt=R0.el;R0.aux=R0.tur}
+ vPose(V0,n,R0.yaw,R0.tilt,R0.ay,R0.ap,R0.aux,dt,now);
+ if(n===2){V0.P.jL.visible=V0.P.jR.visible=R0.jet;if(now-R0.pT<.35)V0.P.aR.rotation.x=1.5}
+ V0.g.updateMatrixWorld(true);heliLight(n===3);
+ const hpP=Math.max(0,Math.ceil(R0.hp/VEH[n].hp*100)),sp=Math.round(R0.v.length()*3.6),rd=t=>now>t?'готовы':Math.ceil(t-now)+' с';
+ put(el,n===2?`РОБОТ · броня ${hpP}% · ракеты ${rd(R0.f2T)} · `+(coarse?'«Пушки», «Ракеты», «Удар»':'ЛКМ — пушки, ПКМ — ракеты, E — удар, Пробел — прыжок, X — выйти')
+  :n===3?`ВЕРТОЛЁТ · броня ${hpP}% · ${sp} км/ч · ракеты ${rd(R0.f2T)} · `+(coarse?'«Пулемёт», «Ракеты»':'ЛКМ — пулемёт, ПКМ — ракеты, X — выйти')
+  :n===4?`РАКЕТА · ${sp} км/ч · топливо ${Math.max(0,Math.ceil(R0.fuel))} с · `+(coarse?'«Соскочить»':'Shift — турбо, E — соскочить')
+  :`ТАНК · броня ${hpP}% · пушка ${now>R0.fireT?'заряжена':Math.ceil(R0.fireT-now)+' с'} · `+(coarse?'«Пушка», «Пулемёт»':'ЛКМ — пушка, ПКМ — пулемёт, X — выйти'));
+ // на телефоне панель техники встаёт под панелью боссов
+ if(coarse&&now-drT>.5){drT=now;const bE=$('boss');el.style.top=bE.style.display!=='none'?(bE.offsetTop+bE.offsetHeight+6)+'px':''}}
+// подписи сенсорных кнопок под текущую технику
+const BL={bW:'Паутина',bJ:'Прыжок',bZ:'Рывок',bS:'Нырок',bA:'Удар',bV:'Сеть',bG:'Взять / бросить'},
+ BLV=[BL,{bW:'Форсаж',bJ:'Вверх',bZ:'Таран',bS:'Вниз',bA:'Огонь',bV:'—',bG:'Вернуть'},{bW:'Бег',bJ:'Прыжок',bZ:'Ракеты',bS:'—',bA:'Пушки',bV:'Удар',bG:'Выйти'},
+  {bW:'Форсаж',bJ:'Вверх',bZ:'Ракеты',bS:'Вниз',bA:'Пулемёт',bV:'—',bG:'Выйти'},{bW:'Турбо',bJ:'—',bZ:'Соскочить',bS:'—',bA:'—',bV:'—',bG:'Соскочить'},{bW:'Газ',bJ:'—',bZ:'Пулемёт',bS:'—',bA:'Пушка',bV:'—',bG:'Выйти'}];
+function btnLabels(){if(!coarse)return;const L0=BLV[drone.on?1:ride.k];for(const id in BL)put($(id),L0[id])}
+// мощность «мотора» для звука: вертолёт и ракета громче, робот — ускорители
+const engVol=()=>{const s=ride.v.length();return ride.k===3?.12+s*.002:ride.k===4?.22:ride.k===5?.07+s*.004:ride.jet?.2:.04}
+
+// шаг: пока летает дрон, ввод уходит ему, а герой стоит без управления (гравитация и столкновения работают); в технике герой едет в ней
+function step(dt){if(drone.on){droneStep(dt);const kk=k;k={};stepHero(dt);k=kk}else if(ride.k)rideStep(dt);else stepHero(dt);dShotsStep(dt);shotsStep(dt);if(ride.k&&ride.boom)vehBoom(ride.boom===2)}
 
 // --- ввод ---
 const H={};for(const id of['sp','ht','mx','borough','st','sc','tk','race','combo','cross','ovh','ovs','ov','tod','crc','suitB'])H[id]=$(id);
@@ -1140,7 +1586,7 @@ addEventListener('touchstart',()=>{lastTouch=performance.now()},{passive:true,ca
 function playing(){return H.ov.style.display==='none'}
 function lockPtr(){if(coarse)return;try{const r=renderer.domElement.requestPointerLock();if(r&&r.catch)r.catch(()=>{})}catch(_){}}
 function pause(){if(!playing())return;k={};anchor=null;zip=false;pauseAt=performance.now()/1000;H.ovh.textContent='Пауза';H.ovs.textContent='Кликните или коснитесь, чтобы продолжить.';H.ov.style.display='';save()}
-const KM={KeyW:'w',KeyA:'a',KeyS:'s',KeyD:'d',KeyE:'e',KeyF:'f',KeyG:'g',KeyQ:'q',KeyR:'r',KeyC:'c',KeyM:'m',KeyP:'p',KeyV:'v',KeyJ:'j',KeyT:'t',KeyN:'n',KeyB:'b',KeyK:'k',KeyY:'y',KeyX:'x',ShiftLeft:'shift',ShiftRight:'shift',Space:'space',ArrowLeft:'arrowleft',ArrowRight:'arrowright',ArrowUp:'arrowup',ArrowDown:'arrowdown'};
+const KM={KeyW:'w',KeyA:'a',KeyS:'s',KeyD:'d',KeyE:'e',KeyF:'f',KeyG:'g',KeyQ:'q',KeyR:'r',KeyC:'c',KeyM:'m',KeyP:'p',KeyV:'v',KeyJ:'j',KeyT:'t',KeyN:'n',KeyB:'b',KeyK:'k',KeyY:'y',KeyX:'x',Digit1:'1',Digit2:'2',Digit3:'3',Digit4:'4',Digit5:'5',ShiftLeft:'shift',ShiftRight:'shift',Space:'space',ArrowLeft:'arrowleft',ArrowRight:'arrowright',ArrowUp:'arrowup',ArrowDown:'arrowdown'};
 addEventListener('keydown',e=>{if(document.activeElement===chatIn||document.activeElement===nickIn)return;const c=KM[e.code];if(!c){if(e.code==='Escape'&&!locked)pause();if(e.code==='Enter'&&playing()){e.preventDefault();openChat()}return}e.preventDefault();k[c]=true;if(e.repeat)return;
  if(c==='m'){muted=!muted;if(master)master.gain.value=muted?0:.7;showToast(muted?'Звук выключен':'Звук включён');return}
  if(c==='p'){pause();return}
@@ -1149,14 +1595,16 @@ addEventListener('keydown',e=>{if(document.activeElement===chatIn||document.acti
  if(c==='n'){tod=(tod+.125)%1;showToast('Время: '+hhmm());return}
  if(c==='b'){raining=!raining;wNext=performance.now()/1000+150;showToast(raining?'Пошёл дождь':'Дождь закончился');return}
  if(!playing())return;
+ if(/^[1-5]$/.test(c)){vehKey(+c);return}
+ if(ride.k){if(c==='x')vehExit();if(c==='e')vehE();if(c==='j')k.fire=true;return}
  if(drone.on){if(c==='x')droneToggle();if(c==='e')droneRam();if(c==='j')k.fire=true;return}
  if(c==='x')droneToggle();if(c==='f'||c==='shift')swingDown();if(c==='e')zipShot();if(c==='g')grabOrThrow();if(c==='space')jumpKey();if(c==='j')attack();if(c==='v')webShot();if(c==='y')bossCall();if(c==='q'){anchor=null;zip=false;swingWait=performance.now()/1000+.4}if(c==='r')reset()});
 addEventListener('keyup',e=>{const c=KM[e.code];if(!c)return;k[c]=false;if(c==='j')k.fire=false;if(c==='f'||c==='shift')swingUp()});
 addEventListener('blur',()=>{k={};letGo()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();save()}});
 addEventListener('pagehide',save);
-addEventListener('mousedown',e=>{if(!playing()||performance.now()-lastTouch<900||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents))return;if(!locked)lockPtr();if(drone.on){if(e.button===0)k.fire=true;if(e.button===2)droneRam();return}if(e.button===0)attack();if(e.button===1){e.preventDefault();webShot()}if(e.button===2)zipShot()});
-addEventListener('mouseup',e=>{if(e.button===0)k.fire=false});
+addEventListener('mousedown',e=>{if(!playing()||performance.now()-lastTouch<900||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents))return;if(!locked)lockPtr();if(ride.k){if(e.button===0)k.fire=true;if(e.button===2)k.fire2=true;return}if(drone.on){if(e.button===0)k.fire=true;if(e.button===2)droneRam();return}if(e.button===0)attack();if(e.button===1){e.preventDefault();webShot()}if(e.button===2)zipShot()});
+addEventListener('mouseup',e=>{if(e.button===0)k.fire=false;if(e.button===2)k.fire2=false});
 addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('mousemove',e=>{if(locked){yaw-=e.movementX*.0025;pit=cl(pit+e.movementY*.0025,PMIN,1.3);lookT=performance.now()/1000}});
 document.addEventListener('pointerlockchange',()=>{const was=locked;locked=!!document.pointerLockElement;if(was&&!locked)pause()});
@@ -1179,7 +1627,11 @@ addEventListener('touchend',e=>{for(const t of e.changedTouches){
  if(t.identifier===lid)lid=null}});
 const hold=(id,on,off)=>{const b=$(id);b.addEventListener('touchstart',e=>{e.preventDefault();on()});b.addEventListener('touchend',e=>{e.preventDefault();off()});b.addEventListener('touchcancel',off)};
 addEventListener('touchcancel',()=>{jid=lid=null;knob.style.transform='';k.a=k.d=k.w=k.s=false});
-hold('bW',()=>{k.tw=true;swingDown()},()=>{k.tw=false;swingUp()});hold('bJ',()=>{k.space=true;jumpKey()},()=>{k.space=false});hold('bZ',()=>{if(drone.on)droneRam();else zipShot()},()=>{});hold('bS',()=>{k.c=true},()=>{k.c=false});hold('bG',grabOrThrow,()=>{});hold('bA',()=>{if(drone.on)k.fire=true;else attack()},()=>{k.fire=false});hold('bV',webShot,()=>{});hold('bD',droneToggle,()=>{});
+hold('bW',()=>{k.tw=true;swingDown()},()=>{k.tw=false;swingUp()});hold('bJ',()=>{k.space=true;jumpKey()},()=>{k.space=false});hold('bZ',()=>{if(drone.on)droneRam();else if(ride.k===4)vehE();else if(ride.k)k.fire2=true;else zipShot()},()=>{k.fire2=false});hold('bS',()=>{k.c=true},()=>{k.c=false});hold('bG',()=>{if(drone.on)droneEnd('Дрон вернулся');else if(ride.k)vehExit();else grabOrThrow()},()=>{});hold('bA',()=>{if(drone.on||ride.k)k.fire=true;else attack()},()=>{k.fire=false});hold('bV',()=>{if(ride.k)vehE();else webShot()},()=>{});
+// «Техника»: меню выбора поверх экрана
+const vmEl=$('vm');hold('bD',()=>{vmEl.style.display=vmEl.style.display==='flex'?'none':'flex'},()=>{});
+for(const[t,n]of[['Дрон',1],['Робот',2],['Вертолёт',3],['Ракета',4],['Танк',5],['Выйти',0],['✕',-1]]){const b=document.createElement('button');b.textContent=t;vmEl.append(b);
+ b.addEventListener('touchstart',e=>{e.preventDefault();vmEl.style.display='none';if(n>0)vehKey(n);else if(!n){if(ride.k)vehExit();else if(drone.on)droneEnd('Дрон вернулся')}})}
 $('bP').addEventListener('touchstart',e=>{e.preventDefault();pause()});
 
 // --- цикл ---
@@ -1232,8 +1684,8 @@ function stepHero(dt){
  if(anchor&&!crawl&&!zip){tmp.subVectors(p,anchor);const d=tmp.length();
   if(d>len){tmp.divideScalar(d);p.copy(anchor).addScaledVector(tmp,len);const vn=v.dot(tmp);if(vn>0)v.addScaledVector(tmp,-vn)}}
  if(anchor){tmp.subVectors(anchor,p);const L0=tmp.length();if(L0>1){tmp.divideScalar(L0);if(firstHit(p,tmp,L0)<L0-.9){anchor=null;zip=false}}}
- const vy=v.y,wasG=onG;collide();
- if(onG){if(!wasG&&vy<-20)landFX(-vy);flip=0;if(!onBoss&&topAt(p.x,p.z,p.y)>-1e8)safe.copy(p)}
+ const vy=v.y,wasG=onG;collide();if(plat){p.x+=plat.pv.x*dt;p.z+=plat.pv.z*dt}
+ if(onG){if(!wasG&&vy<-20)landFX(-vy);flip=0;if(!onBoss&&!plat&&topAt(p.x,p.z,p.y)>-1e8)safe.copy(p)}
  if(py>-.9&&p.y<=-.9&&!solidAt(p.x,p.z))splash(new V3(p.x,-.85,p.z),1.6);
  if(!onG&&!crawl&&!SU.iron){const s=v.length();if(s>12)chain+=s*dt*mult*.5}else if(onG&&chain>0)bank();
  stepProps(dt);collect(now);stepFoes(dt,now);if(now-hurtT>4&&hp<100)hp=Math.min(100,hp+10*dt);
@@ -1261,7 +1713,7 @@ function drawMap(){const F0=drone.on?drone.pos:p,W=mp.width,h=W/2,s=W/380;mc.cle
  if(tr>=0){const r=TRACKS[tr].rings[race].position;dot(r.x,r.z,hex(TRACKS[tr].color),.035,1)}else TRACKS.forEach(T=>dot(T.rings[0].position.x,T.rings[0].position.z,hex(T.color),.03,1));
  if(performance.now()%600<400)crimes.forEach(cr=>{if(!cr.done)dot(cr.x,cr.z,'#ff3b3b',.042,1)});
  for(const o of peersMP.values())if(o.model)dot(o.model.position.x,o.model.position.z,hexc(o.col),.03,1);
- if(boss.alive)dot(boss.x,boss.z,'#ffe14d',.055,1);
+ for(const B of BOSSES)if(B.alive)dot(B.x,B.z,hexc(B.col),.055,1);
  if(drone.on)dot(p.x,p.z,'#ff5a4a',.03,1);
  mc.fillStyle='#fff';mc.beginPath();mc.moveTo(h,h-W*.055);mc.lineTo(h-W*.035,h+W*.035);mc.lineTo(h+W*.035,h+W*.035);mc.closePath();mc.fill()}
 const put=(el,s)=>{if(el._s!==s){el._s=s;el.textContent=s}};
@@ -1280,7 +1732,7 @@ function frame(){
  const sp=v.length();maxSp=Math.max(maxSp,sp);
  put(H.sp,''+Math.round(sp*3.6));put(H.mx,''+Math.round(maxSp*3.6));put(H.ht,''+Math.round(p.y-PR));
  put(H.borough,boroughAt(Math.round(p.x/SX),Math.round(p.z/SZ)));put(H.tod,hhmm()+(rainA>.5?' · дождь':''));
- put(H.st,drone.on?'Дрон':SU.iron?(strike?'Удар с налёта':onG?'Бег':(k.shift||k.tw)?'Полёт · форсаж':'Полёт'):strike?'Веб-удар':crawl?(held()?'Бег по стене':'Ползёт по стене'):zip?'Рывок':anchor?'Раскачка':flip>0||relT>0?'Трюк':onG?(held()&&Math.hypot(v.x,v.z)>15?'Паркур':'Бег'):'Полёт');
+ put(H.st,drone.on?'Дрон':ride.k?VEH[ride.k].name:SU.iron?(strike?'Удар с налёта':onG?'Бег':(k.shift||k.tw)?'Полёт · форсаж':'Полёт'):strike?'Веб-удар':crawl?(held()?'Бег по стене':'Ползёт по стене'):zip?'Рывок':anchor?'Раскачка':flip>0||relT>0?'Трюк':onG?(held()&&Math.hypot(v.x,v.z)>15?'Паркур':'Бег'):'Полёт');
  put(H.sc,score.toLocaleString('ru-RU'));put(H.tk,got.size+'/'+TOK.length);put(H.crc,''+crimesDone);hpb.style.width=Math.max(0,hp)+'%';
  hurtEl.style.opacity=Math.min(1,Math.max(0,1-(now-hurtT)/.7)*.8+(hp<35?.3+Math.sin(now*6)*.12:0));
  if(chain>0)put(H.combo,'+'+Math.round(chain).toLocaleString('ru-RU')+'  ×'+mult);H.combo.style.opacity=chain>0?1:0;
@@ -1297,18 +1749,18 @@ function frame(){
  hq.slerp(qT,Math.min(1,9*dt));hero.quaternion.copy(hq);
  if(flip>0)hero.quaternion.multiply(qF.setFromAxisAngle(flipAx,flipS*Math.PI*(1-Math.cos(Math.PI*flip))));
  if(relT>0&&relK===2&&!onG)hero.quaternion.multiply(qF.setFromAxisAngle(UP,Math.PI*2*(1-relT/.55)));
- pose(dt,sp);hero.updateMatrixWorld(true);
- {const fl=SU.iron&&!onG,bo=k.shift||k.tw;for(const f of FLAMES){f.visible=fl;if(fl)f.scale.set(1,(.8+Math.random()*.4)*(bo?1.7:1),1)}if(AC&&thrG)thrG.gain.setTargetAtTime(fl&&on?(bo?.22:.1):drone.on&&on?.06+drone.v.length()*.003:0,AC.currentTime,.1)}
+ pose(dt,sp);if(ride.k===4)rideHero();hero.updateMatrixWorld(true);
+ {const fl=SU.iron&&!onG&&!ride.k,bo=k.shift||k.tw;for(const f of FLAMES){f.visible=fl;if(fl)f.scale.set(1,(.8+Math.random()*.4)*(bo?1.7:1),1)}if(AC&&thrG)thrG.gain.setTargetAtTime(fl&&on?(bo?.22:.1):drone.on&&on?.06+drone.v.length()*.003:ride.k&&on?engVol():0,AC.currentTime,.1)}
  // нить: от правой ладони к точке на фасаде, а при веб-ударе — к врагу
  const we=strike&&!SU.iron?t2.set(strike.g.position.x,strike.g.position.y+1.2,strike.g.position.z):anchor?anchorVis:null;
  if(we){const e=cl((now-webT)/.08,0,1);A[1].el.localToWorld(hand.set(0,-.3,0));tmp.subVectors(we,hand).multiplyScalar(e);const l=tmp.length();
   if(l>.01){web.position.copy(hand);web.scale.set(1,l,1);web.quaternion.setFromUnitVectors(UP,tmp.divideScalar(l));web.visible=true}else web.visible=false;
   mark.position.copy(we);mark.visible=e>=1&&!strike}
  else web.visible=mark.visible=false;
- droneFrame(dt,now);netStep(now,on);bossStep(on||[...peersMP.values()].some(o=>o.model)?dt:0,now,on);
+ droneFrame(dt,now);rideFrame(dt,now);btnLabels();netStep(now,on);bossStep(on||[...peersMP.values()].some(o=>o.model)?dt:0,now,on);
  // камера: отодвигается на скорости и не уходит сквозь стены; при взгляде вверх опускается к земле и подъезжает ближе
- const cp=Math.cos(pit),want=drone.on?5:14+Math.min(7,sp*.07);
- if(drone.on){tgt.copy(drone.pos);tgt.y+=.7}else tgt.set(p.x,p.y+2,p.z);cdir.set(Math.sin(yaw)*cp,Math.sin(pit),Math.cos(yaw)*cp);
+ const cp=Math.cos(pit),want=drone.on?5:ride.k?VEH[ride.k].want:14+Math.min(7,sp*.07);
+ if(drone.on){tgt.copy(drone.pos);tgt.y+=.7}else if(ride.k){tgt.copy(ride.pos);tgt.y+=VEH[ride.k].ty}else tgt.set(p.x,p.y+2,p.z);cdir.set(Math.sin(yaw)*cp,Math.sin(pit),Math.cos(yaw)*cp);
  let cd=Math.min(want,firstHit(tgt,cdir,want+1)-1);
  if(cdir.y<0){const fy=Math.max(topAt(tgt.x+cdir.x*cd,tgt.z+cdir.z*cd,tgt.y),-.9);cd=Math.min(cd,(tgt.y-fy-.6)/-cdir.y)}
  cd=Math.max(1.2,cd);camD=cd<camD?cd:camD+(cd-camD)*Math.min(1,4*dt);
@@ -1323,10 +1775,10 @@ function frame(){
  // тень: на тротуаре она выше асфальта, на мосту — на полотне
  let gy=topAt(p.x,p.z,p.y);if(gy===0){const i=Math.round(p.x/SX),j=Math.round(p.z/SZ);gy=bridgeAt(i,j)?.45:Math.abs(p.x-i*SX)<21&&Math.abs(p.z-j*SZ)<16.5?.13:-.13}
  const hh=p.y-PR-gy;
- if(gy<-1e8||crawl||hh>70)blob.visible=false;else{blob.visible=true;blob.position.set(p.x,gy+.03,p.z);blob.scale.setScalar(.9+hh*.03);blob.material.opacity=.42*(1-hh/70)}
+ if(gy<-1e8||crawl||hh>70||ride.k)blob.visible=false;else{blob.visible=true;blob.position.set(p.x,gy+.03,p.z);blob.scale.setScalar(.9+hh*.03);blob.material.opacity=.42*(1-hh/70)}
  if(on){camera.getWorldDirection(dir);H.cross.classList.toggle('aim',firstHit(camera.position,dir,380)<380);H.cross.classList.toggle('foe',!!foeInAim(.97,60)||bossInAim(.95,160))}
  if(AC&&windG){windG.gain.setTargetAtTime(on?cl((sp-10)/55,0,1)*.3:0,AC.currentTime,.15);windF.frequency.setTargetAtTime(260+sp*22,AC.currentTime,.15)}
- const fight=foes.some(f=>f.aggro&&!f.ko)||boss.alive&&Math.hypot(boss.x-p.x,boss.z-p.z)<180;inten+=((on?Math.max(cl((sp-8)/40,0,1),fight?.85:0):.1)-inten)*Math.min(1,dt*.8);
+ const fight=foes.some(f=>f.aggro&&!f.ko)||BOSSES.some(B=>B.alive&&B.c.distanceTo(p)<200);inten+=((on?Math.max(cl((sp-8)/40,0,1),fight?.85:0):.1)-inten)*Math.min(1,dt*.8);
  if(musG)musG.gain.setTargetAtTime(musicOn?(on?.2:.07):0,AC.currentTime,.3);
  drawFx(on?(drone.on?drone.v.length():sp):0,now);if(now-mapT>.05){mapT=now;drawMap()}
  renderer.render(scene,camera);requestAnimationFrame(frame);
