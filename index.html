@@ -2,12 +2,12 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Web Swing 3D — ночной город</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c8162b'/%3E%3Cpath d='M32 4v56M4 32h56M12 12l40 40M52 12L12 52' stroke='%23111' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='10' fill='none' stroke='%23111' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23111' stroke-width='3'/%3E%3C/svg%3E">
 <style>
 :root{--ink:#e8f1ff;--hud:#6fd3ff;--bg:#2b2a5e;--gold:#ffd166;--panel:rgba(10,15,36,.55)}
-html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:"Trebuchet MS",system-ui,sans-serif;color:var(--ink);touch-action:none;-webkit-user-select:none;user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:"Trebuchet MS",system-ui,sans-serif;color:var(--ink);touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 #gl{display:block}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 #hud{position:fixed;left:calc(env(safe-area-inset-left,0px) + 12px);top:calc(env(safe-area-inset-top,0px) + 12px);padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid rgba(111,211,255,.22);color:var(--hud);font-size:14px;line-height:1.5;pointer-events:none;text-shadow:0 0 8px rgba(111,211,255,.5)}
@@ -55,6 +55,10 @@ html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:
 #boss b{color:#ffe14d}#boss .bar{display:block;width:100%;height:10px;margin-top:5px}#boss .bar i{background:linear-gradient(90deg,#ffb347,#ffe14d)}
 #dr{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);padding:6px 14px;border-radius:10px;background:var(--panel);border:1px solid rgba(125,249,255,.5);color:#bff6ff;font-size:14px;white-space:nowrap;pointer-events:none;display:none}
 #bD{right:calc(env(safe-area-inset-right,0px) + 192px);bottom:calc(env(safe-area-inset-bottom,0px) + 118px)}
+#rot{display:none;color:var(--gold);font-weight:700}
+@media (pointer:coarse) and (orientation:portrait){#rot{display:block}}
+@media (pointer:coarse) and (orientation:landscape){#net{top:calc(env(safe-area-inset-top,0px) + 60px);right:calc(env(safe-area-inset-right,0px) + 134px)}#race{top:calc(env(safe-area-inset-top,0px) + 12px)}#boss{top:calc(env(safe-area-inset-top,0px) + 50px)}#dr{top:calc(env(safe-area-inset-top,0px) + 94px)}#chat{left:calc(env(safe-area-inset-left,0px) + 170px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);max-width:calc(100vw - 470px)}}
+@media (pointer:coarse) and (max-height:430px){.tb{width:64px;height:64px;font-size:11px;right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}#bW{bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#bZ{right:calc(env(safe-area-inset-right,0px) + 88px)}#bS{right:calc(env(safe-area-inset-right,0px) + 88px);bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#bA{bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bV{right:calc(env(safe-area-inset-right,0px) + 88px);bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bG{right:calc(env(safe-area-inset-right,0px) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}#bD{right:calc(env(safe-area-inset-right,0px) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}#joy{width:110px;height:110px}#knob{left:30px;top:30px}#hud{font-size:11px;line-height:1.35}}
 .sb{font:600 15px "Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#1b2a52;border:1px solid #3a5aa0;border-radius:8px;padding:6px 14px;cursor:pointer}
 </style>
 </head>
@@ -74,7 +78,8 @@ html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:
 <div id="tc"><div id="joy"><i id="knob"></i></div><button class="tb" id="bW">Паутина</button><button class="tb" id="bJ">Прыжок</button><button class="tb" id="bZ">Рывок</button><button class="tb" id="bS">Нырок</button><button class="tb" id="bA">Удар</button><button class="tb" id="bV">Сеть</button><button class="tb" id="bG">Взять / бросить</button><button class="tb" id="bD">Дрон</button><button id="bP">❚❚</button><button id="bC">💬</button></div>
 <div id="ov"><div>
 <h1 id="ovh">Web Swing 3D</h1>
-<p id="ovs">Кликните или коснитесь, чтобы начать. Мышь или стрелки — обзор; в полёте камера сама разворачивается по ходу. На телефоне: джойстик слева, свайп — обзор, «Паутина» — держать для раскачки, «Удар» и «Сеть» — бой, «Прыжок» в воздухе — сальто. Клавиши работают в любой раскладке.</p>
+<p id="rot">📱 Поверните телефон горизонтально — так удобнее играть</p>
+<p id="ovs">Кликните или коснитесь, чтобы начать. Мышь или стрелки — обзор; в полёте камера сама разворачивается по ходу. На телефоне: джойстик слева, свайп — обзор, «Паутина» — держать для раскачки, «Удар» и «Сеть» — бой, «Прыжок» в воздухе — сальто, «Дрон» — дрон. Клавиши работают в любой раскладке.</p>
 <div id="mpBox"><label>Имя игрока: <input id="nick" maxlength="16" placeholder="обязательно" autocomplete="off" spellcheck="false"></label>
 <div id="nickHint">Введите имя — его увидят другие игроки над вашей головой.</div>
 <div>Сеть: <span id="netS">подключение…</span></div>
@@ -99,8 +104,8 @@ const $=id=>document.getElementById(id),V3=THREE.Vector3;
 const cl=(x,a,b)=>Math.max(a,Math.min(b,x));
 const R=n=>{let s=Math.sin(n*127.1+311.7)*43758.5453;return s-Math.floor(s)};
 // качество подстраивается под машину: на Retina рендер не выше 1.5×, при просадке FPS разрешение снижается (см. frame)
-const DPR=devicePixelRatio||1,renderer=new THREE.WebGLRenderer({antialias:DPR<1.5,powerPreference:'high-performance'});
-let pxr=Math.min(DPR,1.5);renderer.setPixelRatio(pxr);renderer.domElement.id='gl';
+const MOBILE=matchMedia('(pointer:coarse)').matches,DPR=devicePixelRatio||1,PXMAX=Math.min(DPR,MOBILE?1.25:1.5),PXMIN=MOBILE?.6:.75,renderer=new THREE.WebGLRenderer({antialias:DPR<1.5&&!MOBILE,powerPreference:'high-performance'});
+let pxr=MOBILE?Math.min(DPR,1):PXMAX;renderer.setPixelRatio(pxr);renderer.domElement.id='gl';
 document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene(),SKY=0x2b2a5e;
 scene.background=new THREE.Color(SKY);scene.fog=new THREE.FogExp2(SKY,.0042);
@@ -243,7 +248,7 @@ const isLot=(x,z)=>{const i=Math.round(x/SX),j=Math.round(z/SZ);return landAt(i,
 const LANES=[];
 for(const ax of[0,1])for(let k=-12;k<=11;k++){const c=(k+.5)*(ax?SX:SZ);for(const dir of[-1,1]){const off=c+dir*1.6;let st=null;
  for(let s=-560;s<=560;s+=2){const ok=ax?isLot(off,s):isLot(s,off);if(ok&&st===null)st=s;if((!ok||s===560)&&st!==null){const en=ok?s:s-2;if(en-st>=60)LANES.push({ax,c,off,dir,lo:st+3,hi:en-3});st=null}}}}
-const NCAR=110,cars=[],od=new THREE.Object3D(),CARC=[0x1a1a1a,0x888c94,0x7a1f1f,0xd8dbe0,0x23395b,0x2e5e3a];
+const NCAR=MOBILE?60:110,cars=[],od=new THREE.Object3D(),CARC=[0x1a1a1a,0x888c94,0x7a1f1f,0xd8dbe0,0x23395b,0x2e5e3a];
 {const tot=LANES.reduce((a,L)=>a+L.hi-L.lo,0);
  for(let n=0;n<NCAR;n++){let r=R(n*7.7+3)*tot,L=LANES[0];for(const l of LANES){if(r<l.hi-l.lo){L=l;break}r-=l.hi-l.lo}
   cars.push({L,s:L.lo+r,v:0,vmax:9+R(n*3.3)*6,taxi:R(n*5.1)<.45,honk:0,hit:0})}}
@@ -380,7 +385,7 @@ function pedStep(o,u,dt,t){
  // шаг: ноги и руки качаются в такт скорости
  u.ph+=dt*sp*4.2;const w=sp>.1?Math.sin(u.ph)*Math.min(.75,.35+sp*.1):0;u.ll.rotation.x=w;u.rl.rotation.x=-w;u.la.rotation.x=-w*.8-(u.st==='run'?.3:0);u.ra.rotation.x=w*.8-(u.st==='run'?.3:0)}
 // припаркованные машины стоят у бордюра авеню (полоса x±22), гидранты — на краю тротуара, прохожие — на кольце тротуара
-{let np=0;for(const[i,j]of landCells){const r=R(i*977+j*619+33),x=i*SX,z=j*SZ;if(r<.42)makeProp('car',x+(R(i*9+j*7)>.5?22:-22),z+(R(i*5-j*11)-.5)*20,Math.abs(i+j));if(R(i*7+j*13+21)<.55)makeProp('hydrant',x+(R(i*13-j*3)>.5?20:-20),z+(R(i*11+j*3)-.5)*24);if(R(i*17+j*19+4)<.45)makePed(i,j,np++)}}
+{let np=0;for(const[i,j]of landCells){const r=R(i*977+j*619+33),x=i*SX,z=j*SZ;if(r<.42)makeProp('car',x+(R(i*9+j*7)>.5?22:-22),z+(R(i*5-j*11)-.5)*20,Math.abs(i+j));if(R(i*7+j*13+21)<.55)makeProp('hydrant',x+(R(i*13-j*3)>.5?20:-20),z+(R(i*11+j*3)-.5)*24);if(R(i*17+j*19+4)<(MOBILE?.22:.45))makePed(i,j,np++)}}
 const pv=new V3();
 function kill(o){const u=o.userData;scene.remove(o);propEntities.delete(o);if(heldProp===o)heldProp=null;if(u.jet){scene.remove(u.jet);u.jet.geometry.dispose();u.jet.material.dispose();u.jet=null}}
 function stepProps(dt){const t=performance.now()/1000;for(const o of propEntities){const u=o.userData;
@@ -817,7 +822,7 @@ function envStep(dt,now){tod=(tod+dt/600)%1;
  if(raining&&win>.5&&Math.random()<dt*.06){flashT=now+.12;setTimeout(()=>sfx.thunder(),900)}
  return win}
 // дождь: короткие отрезки в объёме вокруг камеры
-const RN=1500,rainP=new Float32Array(RN*6);for(let n=0;n<RN;n++){const x=Math.random()*90-45,y=Math.random()*60-25,z=Math.random()*90-45;rainP.set([x,y,z,x+.1,y-1.4,z],n*6)}
+const RN=MOBILE?600:1500,rainP=new Float32Array(RN*6);for(let n=0;n<RN;n++){const x=Math.random()*90-45,y=Math.random()*60-25,z=Math.random()*90-45;rainP.set([x,y,z,x+.1,y-1.4,z],n*6)}
 const rainGeo=new THREE.BufferGeometry();rainGeo.setAttribute('position',new THREE.BufferAttribute(rainP,3));
 const rainM=new THREE.LineBasicMaterial({color:0xb4c4da,transparent:true,opacity:0,depthWrite:false}),rainL=new THREE.LineSegments(rainGeo,rainM);rainL.frustumCulled=false;scene.add(rainL);
 function rainStep(dt){rainL.visible=rainA>.02;if(!rainL.visible)return;rainL.position.copy(camera.position);const a=rainP,dy=45*dt;
@@ -1130,7 +1135,8 @@ function step(dt){if(drone.on){droneStep(dt);const kk=k;k={};stepHero(dt);k=kk}e
 // --- ввод ---
 const H={};for(const id of['sp','ht','mx','borough','st','sc','tk','race','combo','cross','ovh','ovs','ov','tod','crc','suitB'])H[id]=$(id);
 H.suitB.textContent='Костюм: '+SU.name+' ▸';H.suitB.addEventListener('click',e=>{e.stopPropagation();nextSuit()});
-const coarse=matchMedia('(pointer:coarse)').matches;
+const coarse=MOBILE;let lastTouch=-1e9;
+addEventListener('touchstart',()=>{lastTouch=performance.now()},{passive:true,capture:true});addEventListener('touchend',()=>{lastTouch=performance.now()},{passive:true,capture:true});
 function playing(){return H.ov.style.display==='none'}
 function lockPtr(){if(coarse)return;try{const r=renderer.domElement.requestPointerLock();if(r&&r.catch)r.catch(()=>{})}catch(_){}}
 function pause(){if(!playing())return;k={};anchor=null;zip=false;pauseAt=performance.now()/1000;H.ovh.textContent='Пауза';H.ovs.textContent='Кликните или коснитесь, чтобы продолжить.';H.ov.style.display='';save()}
@@ -1149,12 +1155,13 @@ addEventListener('keyup',e=>{const c=KM[e.code];if(!c)return;k[c]=false;if(c==='
 addEventListener('blur',()=>{k={};letGo()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();save()}});
 addEventListener('pagehide',save);
-addEventListener('mousedown',e=>{if(!playing()||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents))return;if(!locked)lockPtr();if(drone.on){if(e.button===0)k.fire=true;if(e.button===2)droneRam();return}if(e.button===0)attack();if(e.button===1){e.preventDefault();webShot()}if(e.button===2)zipShot()});
+addEventListener('mousedown',e=>{if(!playing()||performance.now()-lastTouch<900||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents))return;if(!locked)lockPtr();if(drone.on){if(e.button===0)k.fire=true;if(e.button===2)droneRam();return}if(e.button===0)attack();if(e.button===1){e.preventDefault();webShot()}if(e.button===2)zipShot()});
 addEventListener('mouseup',e=>{if(e.button===0)k.fire=false});
 addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('mousemove',e=>{if(locked){yaw-=e.movementX*.0025;pit=cl(pit+e.movementY*.0025,PMIN,1.3);lookT=performance.now()/1000}});
 document.addEventListener('pointerlockchange',()=>{const was=locked;locked=!!document.pointerLockElement;if(was&&!locked)pause()});
 H.ov.addEventListener('click',()=>{if(!myName){nickIn.classList.add('need');$('nickHint').classList.add('need');$('nickHint').textContent='Сначала введите имя игрока';nickIn.focus();return}window.focus();netHello();if(pauseAt&&tr>=0)raceT0+=performance.now()/1000-pauseAt;pauseAt=0;H.ov.style.display='none';audioInit();lockPtr();
+ if(MOBILE&&!document.fullscreenElement){const de=document.documentElement;try{const r=de.requestFullscreen&&de.requestFullscreen({navigationUI:'hide'});if(r&&r.then)r.then(()=>{try{const q=screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape');if(q&&q.catch)q.catch(()=>{})}catch(_){}},()=>{})}catch(_){}}
  if(!started){started=true;showToast(coarse?'Держи «Паутина» и прыгай — дальше раскачка сама':'Держи Shift + W и жми Пробел — дальше раскачка сама')}});
 
 // --- сенсорное управление ---
@@ -1264,11 +1271,11 @@ function frame(){
  const dt=Math.min(clock.getDelta(),.033),now=performance.now()/1000,on=playing();trafficStep(on?dt:0,now);
  if(on)for(let i=0;i<2;i++)step(dt/2);
  // автокачество: раз в 2 с меряем FPS; ниже 45 — снижаем разрешение, дважды подряд выше 57 — возвращаем (паузы вкладки не считаются)
- qualN++;if(now-qualT>2){if(now-qualT<3){const fps=qualN/(now-qualT),top=Math.min(DPR,1.5);
-  if(fps<45&&pxr>.75){pxr=Math.max(.75,pxr-.25);renderer.setPixelRatio(pxr);rs();qualHi=0}else if(fps>57&&pxr<top){if(++qualHi>=2){pxr=Math.min(top,pxr+.25);renderer.setPixelRatio(pxr);rs();qualHi=0}}else qualHi=0}
+ qualN++;if(now-qualT>2){if(now-qualT<3){const fps=qualN/(now-qualT),top=PXMAX;
+  if(fps<45&&pxr>PXMIN){pxr=Math.max(PXMIN,pxr-.25);renderer.setPixelRatio(pxr);rs();qualHi=0}else if(fps>57&&pxr<top){if(++qualHi>=2){pxr=Math.min(top,pxr+.25);renderer.setPixelRatio(pxr);rs();qualHi=0}}else qualHi=0}
   qualN=0;qualT=now}
  // дальние прохожие, машины и гидранты не рисуем — их всё равно скрывает туман
- if(now-cullT>.5){cullT=now;const F1=drone.on?drone.pos:p;for(const o of propEntities){const u=o.userData,dx=o.position.x-F1.x,dz=o.position.z-F1.z,r=u.kind==='npc'?170:240;o.visible=dx*dx+dz*dz<r*r||u.thrown||heldProp===o}}
+ if(now-cullT>.5){cullT=now;const F1=drone.on?drone.pos:p;for(const o of propEntities){const u=o.userData,dx=o.position.x-F1.x,dz=o.position.z-F1.z,r=u.kind==='npc'?(MOBILE?120:170):(MOBILE?170:240);o.visible=dx*dx+dz*dz<r*r||u.thrown||heldProp===o}}
  stepFx(dt);const night=envStep(on?dt:0,now);lifeStep(dt,now,night);rainStep(dt);
  const sp=v.length();maxSp=Math.max(maxSp,sp);
  put(H.sp,''+Math.round(sp*3.6));put(H.mx,''+Math.round(maxSp*3.6));put(H.ht,''+Math.round(p.y-PR));
